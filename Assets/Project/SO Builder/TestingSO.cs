@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace SOFromSheets
 {
-    public class TestingSO : ScriptableObject, IImportableSO<TestingSO>
+    public class TestingSO : ImportableSO<TestingSO>
     {
         [field: SerializeField]
         public int ID { get; set; }

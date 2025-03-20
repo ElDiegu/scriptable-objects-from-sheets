@@ -13,7 +13,6 @@ namespace SOFromSheets
         public string range;
         public string sheetId;
         public string value;
-        public SheetsService service = new SheetsServiceProvider().service;
     }
 
     [CustomEditor(typeof(TestingController))]
@@ -27,7 +26,7 @@ namespace SOFromSheets
 
             if (GUILayout.Button("Get Range")) 
             {
-                foreach (var row in GetController.GetRange(testingController.sheetId, testingController.range, testingController.service)) 
+                foreach (var row in GoogleSheetsService.GetRange(testingController.sheetId, testingController.range)) 
                 {
                     StringBuilder sb = new StringBuilder();
                     foreach (var cell in row) sb.Append(cell + "\t");
@@ -35,7 +34,7 @@ namespace SOFromSheets
                 }
             } 
 
-            if (GUILayout.Button("Set Cell")) UpdateController.UpdateCell(testingController.sheetId, testingController.range, testingController.value, testingController.service);
+            if (GUILayout.Button("Set Cell")) GoogleSheetsService.UpdateCell(testingController.sheetId, testingController.range, testingController.value);
 
             if (GUILayout.Button("Generate SO")) 
                 ScriptableObjectManager.GenerateScriptableObjectsFromRange<TestingSO>(testingController.sheetId, testingController.range, "Assets/Project/Resources/ScriptableObjects");

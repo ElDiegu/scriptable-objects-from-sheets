@@ -8,7 +8,7 @@ namespace SOFromSheets.SOBuilder
 {
     public class ScriptableObjectManager
     {
-        public static void GenerateScriptableObjects<T>(List<List<string>> data, string path) where T : ScriptableObject, IImportableSO<T>
+        public static void GenerateScriptableObjects<T>(List<List<string>> data, string path) where T : ImportableSO<T>
         {
             for (int i = 0; i < data.Count; i ++) 
             {
@@ -21,11 +21,9 @@ namespace SOFromSheets.SOBuilder
             }
         }
 
-        public static void GenerateScriptableObjectsFromRange<T>(string sheetId, string range, string path) where T : ScriptableObject, IImportableSO<T>
+        public static void GenerateScriptableObjectsFromRange<T>(string sheetId, string range, string path) where T : ImportableSO<T>
         {
-            SheetsServiceProvider provider = new SheetsServiceProvider();
-
-            var data = GetController.GetRange(sheetId, range, provider.service);
+            var data = GoogleSheetsService.GetRange(sheetId, range);
 
             GenerateScriptableObjects<T>(data, path);
         }
