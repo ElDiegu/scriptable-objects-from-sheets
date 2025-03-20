@@ -1,34 +1,9 @@
 using System;
 using System.IO;
-using Google.Apis.Auth.OAuth2;
-using Google.Apis.Services;
-using Google.Apis.Sheets.v4;
 using UnityEngine;
 
 namespace SOFromSheets.Integration
-{
-	/// <summary>
-	/// Provides the Sheets Service required to access all the Sheets API functionalities.
-	/// </summary>
-	public class SheetsServiceProvider
-	{
-		public SheetsService service;
-
-		public SheetsServiceProvider() 
-		{
-			ServiceAccountCredential.Initializer initializer = new ServiceAccountCredential.Initializer(AccountParameters.ServiceAccountID);
-
-			ServiceAccountCredential credential = new ServiceAccountCredential(initializer.FromPrivateKey(AccountParameters.PrivateKey));
-			
-			BaseClientService.Initializer baseServiceInitializer = new BaseClientService.Initializer() 
-			{
-				HttpClientInitializer = credential
-			};
-			
-			service = new SheetsService(baseServiceInitializer);
-		}
-	}
-	
+{	
 	/// <summary>
 	/// Stores the Account ID and Private Key of the Service Account
 	/// </summary>
@@ -38,7 +13,6 @@ namespace SOFromSheets.Integration
 		// and key and account ID should be parsed from keys.json
 		private readonly static string basePath = "Project/Credentials/";
 
-		private static string _serviceAccountID;
 		public static string ServiceAccountID { 
 			get 
 			{
@@ -55,7 +29,6 @@ namespace SOFromSheets.Integration
 			}
 		}
 
-		private static string _privateKey;
 		public static string PrivateKey { 
 			get 
 			{
