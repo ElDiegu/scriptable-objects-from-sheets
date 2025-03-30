@@ -1,50 +1,38 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Reflection;
+using System.Linq;
 using UnityEngine;
 
 namespace SOFromSheets
 {
     public class InitializationUtils
-    {
-        public static void InitializeFields<T>(object caller, List<string> data) where T : ScriptableObject 
+    {        
+        // TODO: Let the user choose the separator string through interface windows
+        public static readonly string separatorString = "@"; 
+        public static int FindMemberIndex(string name, List<string> headers) => headers.IndexOf(name);
+        
+        public static object TypeConverter(string value, Type conversionType) 
         {
-            FieldInfo[] fields = typeof(T).GetFields(BindingFlags.Public | BindingFlags.Instance);
-
-            for (int i = 0; i < fields.Length; i++) 
+            if (conversionType == typeof(bool)) 
             {
-                FieldInfo field = fields[i];
-
-                try 
-                {
-                    field.SetValue(caller, Convert.ChangeType(data[i], field.FieldType));
-                }
-                catch (Exception ex) 
-                {
-                    Debug.LogError($"Failed to initialize the Scriptable Object in {field.Name} with value {data[i]}: {ex.Message}");
-                }
+                Debug.Log("bool");
+                if (int.TryParse(value, out int intValue)) return Convert.ChangeType(intValue, conversionType);
             }
-        }
-
-        public static void InitializeProperties<T>(object caller, List<string> data) where T : ScriptableObject 
-        {
-            PropertyInfo[] properties = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
-
-            Debug.Log(properties.Length);
-
-            for (int i = 0; i < properties.Length; i++) 
+            
+            if (conversionType != typeof(string) && conversionType.GetInterface("IEnumerable`1") != null) 
             {
-                PropertyInfo property = properties[i];
-
-                try 
-                {
-                    property.SetValue(caller, Convert.ChangeType(data[i], property.PropertyType));
-                }
-                catch (Exception ex) 
-                {
-                    Debug.LogError($"Failed to initialize the Scriptable Object in {property.Name} with value {data[i]}: {ex.Message}");
-                }
+                Type enumerableType = conversionType.GetInterface("IEnumerable`1").GetGenericArguments()[0];
+                
+                // Initialize a List of the desired type to store all elements from the Enumerable as desired type
+                IList elementList = (IList)Activator.CreateInstance(typeof(List<>).MakeGenericType(enumerableType));
+                foreach (string element in value.Split(separatorString)) elementList.Add(TypeConverter(element, enumerableType));
+                
+                return Activator.CreateInstance(conversionType, new object[] { elementList });
             }
+            
+            Debug.Log($"Converting {value} to {conversionType}");
+            return Convert.ChangeType(value, conversionType);
         }
     }
 }

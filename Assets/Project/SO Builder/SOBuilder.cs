@@ -10,11 +10,10 @@ namespace SOFromSheets.SOBuilder
     {
         public static void GenerateScriptableObjects<T>(List<List<string>> data, string path) where T : ImportableSO<T>
         {
-            for (int i = 0; i < data.Count; i ++) 
+            for (int i = 1; i < data.Count; i ++) 
             {
                 T asset = ScriptableObject.CreateInstance<T>();
-                Debug.Log(asset);
-                asset.Initialize(data[i]);
+                asset.Initialize(data[0], data[i]);
 
                 AssetDatabase.CreateAsset(asset, path + $"/{typeof(T).ToString().Split('.')[1]}_{i}.asset");
                 AssetDatabase.SaveAssets();

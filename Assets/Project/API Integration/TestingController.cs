@@ -37,7 +37,7 @@ namespace SOFromSheets
             if (GUILayout.Button("Set Cell")) GoogleSheetsService.UpdateCell(testingController.sheetId, testingController.range, testingController.value);
 
             if (GUILayout.Button("Generate SO")) 
-                ScriptableObjectManager.GenerateScriptableObjectsFromRange<TestingSO>(testingController.sheetId, testingController.range, "Assets/Project/Resources/ScriptableObjects");
+                ScriptableObjectManager.GenerateScriptableObjectsFromRange<TestingSO>(testingController.sheetId, testingController.range, "Assets/Project/Resources/Scriptable Objects");
         }
     }
 }

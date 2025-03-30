@@ -148,7 +148,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7242ead0a7cc414ab5023b78429ef92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  range: Sheet1!A2:C3
+  range: Sheet1!A1:F4
   sheetId: 1NNL6lvA7hHKdwlYU7KT7_4kYi1ZzvXTrEs0onUa-mmw
   value: 
 --- !u!4 &74153497
