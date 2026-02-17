@@ -7,7 +7,7 @@ namespace SOFromSheets.SOBuilder
     public class SheetImportedAttribute : Attribute
     {
         /// <summary>
-        /// This name will be used to intialize the variable. It must match with the value's column first cell.
+        /// This name will be used to initialize the variable. It must match with the value's column first cell.
         /// </summary>
         public string HeaderName { get; }
         

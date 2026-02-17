@@ -7,9 +7,12 @@ using UnityEngine;
 namespace SOFromSheets.SOBuilder
 {
     /// <summary>
-    /// Interface required for the SOFromSheets extension to work. Scriptable Objects must inherit from this class to be imported from the provided Sheet.
+    /// Interface required for the SOFromSheets extension to work. Scriptable Objects must inherit from this class to
+    /// be imported from the provided Sheet.
     /// </summary>
-    /// <typeparam name="T">The type where this interface is getting implemented. Must be an Scriptable Object class.</typeparam>
+    /// <typeparam name="T">
+    /// The type where this interface is getting implemented. Must be a Scriptable Object class.
+    /// </typeparam>
     public class ImportableSO<T> : ScriptableObject where T : ScriptableObject
     {
         public void Initialize(List<string> headers, List<string> data) 
@@ -21,8 +24,7 @@ namespace SOFromSheets.SOBuilder
                     BindingFlags.Instance |
                     BindingFlags.DeclaredOnly)
                 .Where(member =>
-                    (member.MemberType == MemberTypes.Field ||
-                    member.MemberType == MemberTypes.Property) &&
+                    member.MemberType is MemberTypes.Field or MemberTypes.Property &&
                     member.GetCustomAttribute<SheetImportedAttribute>() != null
                 ).ToArray();
                 
@@ -39,13 +41,13 @@ namespace SOFromSheets.SOBuilder
                     
                     if (members[i].MemberType == MemberTypes.Field) 
                     {
-                        object convertedValue = InitializationUtils.TypeConverter(data[headerIndex], (members[i] as FieldInfo).FieldType); 
-                        (members[i] as FieldInfo).SetValue(this, convertedValue);
+                        object convertedValue = InitializationUtils.TypeConverter(data[headerIndex], ((FieldInfo)members[i]).FieldType); 
+                        ((FieldInfo)members[i]).SetValue(this, convertedValue);
                     }   
                     else if (members[i].MemberType == MemberTypes.Property)
                     {
-                        object convertedValue = InitializationUtils.TypeConverter(data[headerIndex], (members[i] as PropertyInfo).PropertyType); 
-                        (members[i] as PropertyInfo).SetValue(this, convertedValue);
+                        object convertedValue = InitializationUtils.TypeConverter(data[headerIndex], ((PropertyInfo)members[i]).PropertyType); 
+                        ((PropertyInfo)members[i]).SetValue(this, convertedValue);
                     }
                 }
                 catch (ArgumentException ex) 
