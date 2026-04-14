@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace SOFromSheets
@@ -28,7 +27,7 @@ namespace SOFromSheets
                 IList elementList = (IList)Activator.CreateInstance(typeof(List<>).MakeGenericType(enumerableType));
                 foreach (string element in value.Split(separatorString)) elementList.Add(TypeConverter(element, enumerableType));
                 
-                return Activator.CreateInstance(conversionType, new object[] { elementList });
+                return Activator.CreateInstance(conversionType, elementList);
             }
             
             Debug.Log($"Converting {value} to {conversionType}");

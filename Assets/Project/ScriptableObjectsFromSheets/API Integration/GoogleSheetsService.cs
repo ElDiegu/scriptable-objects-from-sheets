@@ -6,6 +6,7 @@ using Google.Apis.Auth.OAuth2;
 using Google.Apis.Services;
 using Google.Apis.Sheets.v4;
 using Google.Apis.Sheets.v4.Data;
+using Project.SO_Builder;
 using SOFromSheets.Integration;
 using UnityEngine;
 
@@ -39,6 +40,11 @@ namespace SOFromSheets.Controllers
 
 			List<List<string>> values = response.Values.Select(row => row.Select(cell => cell?.ToString() ?? string.Empty).ToList()).ToList();
 			return values;
+		}
+
+		public static List<List<string>> GetRange(SheetQuery query)
+		{
+			return GetRange(query.SheetId, query.Range);
 		}
 		
 		public static async Task<List<List<string>>> GetRangeAsync(string sheetId, string range) 

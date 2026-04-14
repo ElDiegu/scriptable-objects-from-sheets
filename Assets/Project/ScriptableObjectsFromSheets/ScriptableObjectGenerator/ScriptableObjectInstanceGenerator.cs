@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace SOFromSheets.SOBuilder
 {
-    public class ScriptableObjectManager
+    public static class ScriptableObjectInstanceGenerator
     {
         public static void GenerateScriptableObjects<T>(List<List<string>> data, string path) where T : ImportableSO<T>
         {
