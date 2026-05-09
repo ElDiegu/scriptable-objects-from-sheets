@@ -7,7 +7,7 @@ using SOFromSheets.Controllers;
 using UnityEditor;
 using UnityEngine;
 
-namespace ScriptableObjectsFromSheets.ScriptableObjectBuilder.Interface
+namespace ScriptableObjectsFromSheets.ScriptableObjectBuilder.UI
 {
     public class ScriptableObjectBuilderWindow : EditorWindow
     {
@@ -56,15 +56,15 @@ namespace ScriptableObjectsFromSheets.ScriptableObjectBuilder.Interface
         private void OnGUI()
         {
             DrawHeaderBar();
-            WindowUtils.DrawHorizontalLine(Color.dimGray);
+            UIUtils.DrawHorizontalLine(Color.dimGray);
             
             EditorGUILayout.BeginHorizontal();
 
             EditorGUILayout.BeginVertical(GUILayout.Width(600), GUILayout.ExpandHeight(true));
             DrawSheetSelection();
-            WindowUtils.DrawHorizontalLine(Color.dimGray);
+            UIUtils.DrawHorizontalLine(Color.dimGray);
             DrawClassBuilderSetup();
-            WindowUtils.DrawHorizontalLine(Color.dimGray);
+            UIUtils.DrawHorizontalLine(Color.dimGray);
             DrawClassFieldTable();
             EditorGUILayout.EndVertical();
             
@@ -97,7 +97,7 @@ namespace ScriptableObjectsFromSheets.ScriptableObjectBuilder.Interface
             
             EditorGUI.DrawRect(iconRect, Color.dodgerBlue);
             GUI.Label(iconRect, EditorGUIUtility.IconContent("ScriptableObject Icon").image, EditorStyles.label);
-            GUI.Label(labelRect, "Scriptable Object from Sheets Builder", WindowStyles.Header);
+            GUI.Label(labelRect, "Scriptable Object from Sheets Builder", UIUtils.Header);
         }
 
         /// <summary>
@@ -105,24 +105,24 @@ namespace ScriptableObjectsFromSheets.ScriptableObjectBuilder.Interface
         /// </summary>
         private void DrawSheetSelection()
         {
-            EditorGUILayout.LabelField("Sheet Selection", WindowStyles.SectionLabel);
+            EditorGUILayout.LabelField("Sheet Selection", UIUtils.SectionLabel);
             
             // Spreadsheet URL
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("Spreadsheet URL", GUILayout.Width(EditorGUIUtility.labelWidth));
-            _spreadsheetUrl = EditorGUILayout.TextField(_spreadsheetUrl, WindowUtils.TextInputLayout);
+            _spreadsheetUrl = EditorGUILayout.TextField(_spreadsheetUrl, UIUtils.TextInputLayout);
             EditorGUILayout.EndHorizontal();
             
             // Sheet Name
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("Sheet Name", GUILayout.Width(EditorGUIUtility.labelWidth));
-            _sheetName = EditorGUILayout.TextField(_sheetName, WindowUtils.TextInputLayout);
+            _sheetName = EditorGUILayout.TextField(_sheetName, UIUtils.TextInputLayout);
             EditorGUILayout.EndHorizontal();
             
             // Range
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("Range", GUILayout.Width(EditorGUIUtility.labelWidth));
-            _range = EditorGUILayout.TextField(_range, WindowUtils.TextInputLayout);
+            _range = EditorGUILayout.TextField(_range, UIUtils.TextInputLayout);
             EditorGUILayout.EndHorizontal();
             
             bool validData = !string.IsNullOrWhiteSpace(_spreadsheetUrl) && !string.IsNullOrWhiteSpace(_sheetName) && !string.IsNullOrWhiteSpace(_range);
@@ -133,7 +133,7 @@ namespace ScriptableObjectsFromSheets.ScriptableObjectBuilder.Interface
             
             if (!SheetDataIsValid()) GUI.enabled = false;
             
-            if (GUILayout.Button("Process Sheet", WindowUtils.ClassSetupButtonLayout))
+            if (GUILayout.Button("Process Sheet", UIUtils.ClassSetupButtonLayout))
             {
                 ProcessSheet();
             }
@@ -150,21 +150,21 @@ namespace ScriptableObjectsFromSheets.ScriptableObjectBuilder.Interface
         /// </summary>
         private void DrawClassBuilderSetup()
         {
-            EditorGUILayout.LabelField("Class Setting", WindowStyles.SectionLabel);
+            EditorGUILayout.LabelField("Class Setting", UIUtils.SectionLabel);
             
             EditorGUI.BeginDisabledGroup(_processedSheetData == null);
             
             // Class Name
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("Class Name", GUILayout.Width(EditorGUIUtility.labelWidth));
-            _className = EditorGUILayout.TextField(_className, WindowUtils.TextInputLayout);
+            _className = EditorGUILayout.TextField(_className, UIUtils.TextInputLayout);
             EditorGUILayout.EndHorizontal();
             
             // Namespace
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("Namespace", GUILayout.Width(EditorGUIUtility.labelWidth));
-            _classNamespace = EditorGUILayout.TextField(_classNamespace, WindowUtils.TextInputLayout);
-            if (GUILayout.Button("Suggest", WindowUtils.ClassSetupButtonLayout))
+            _classNamespace = EditorGUILayout.TextField(_classNamespace, UIUtils.TextInputLayout);
+            if (GUILayout.Button("Suggest", UIUtils.ClassSetupButtonLayout))
             {
                 _classNamespace = ScriptableObjectClassBuilder.GetNamespaceFromOutputPath(_outputPath);
             } 
@@ -173,19 +173,19 @@ namespace ScriptableObjectsFromSheets.ScriptableObjectBuilder.Interface
             // Asset Menu and File Name
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("Asset Menu", GUILayout.Width(EditorGUIUtility.labelWidth));
-            _assetMenuPath = EditorGUILayout.TextField(_assetMenuPath, WindowUtils.TextInputLayout);
+            _assetMenuPath = EditorGUILayout.TextField(_assetMenuPath, UIUtils.TextInputLayout);
             EditorGUILayout.EndHorizontal();
             
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("File name", GUILayout.Width(EditorGUIUtility.labelWidth));;
-            _fileName = EditorGUILayout.TextField(_fileName, WindowUtils.TextInputLayout);
+            _fileName = EditorGUILayout.TextField(_fileName, UIUtils.TextInputLayout);
             EditorGUILayout.EndHorizontal();
             
             // Output Path
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("Output Path", GUILayout.Width(EditorGUIUtility.labelWidth));
-            _outputPath = EditorGUILayout.TextField(_outputPath, WindowUtils.TextInputLayout);
-            if (GUILayout.Button("Browse", WindowUtils.ClassSetupButtonLayout))
+            _outputPath = EditorGUILayout.TextField(_outputPath, UIUtils.TextInputLayout);
+            if (GUILayout.Button("Browse", UIUtils.ClassSetupButtonLayout))
             {
                 _outputPath = InterfaceUtils.ChooseOutputPath(_outputPath);
             }
@@ -200,26 +200,26 @@ namespace ScriptableObjectsFromSheets.ScriptableObjectBuilder.Interface
         private void DrawClassFieldTable()
         {
             GUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("Class Fields", WindowStyles.SectionLabel);
+            EditorGUILayout.LabelField("Class Fields", UIUtils.SectionLabel);
             
             // Add field button should only appear if the sheet has been processed.
             if (_processedSheetData != null)
-                if (GUILayout.Button("Add Field", WindowUtils.ClassSetupButtonLayout)) _classFields.Add(new ClassField());
+                if (GUILayout.Button("Add Field", UIUtils.ClassSetupButtonLayout)) _classFields.Add(new ClassField());
             GUILayout.EndHorizontal();
             
             Rect rowRect = EditorGUILayout.GetControlRect(false, 18);
             EditorGUI.DrawRect(rowRect, _defaultBackgroundColor);
 
-            float tableCursor = rowRect.x + WindowUtils.CellPadding;
+            float tableCursor = rowRect.x + UIUtils.CellPadding;
 
-            GUI.Label(WindowUtils.TableCellRect(ref tableCursor, WindowUtils.NameColumnWidth, rowRect), "Field Name",
-                WindowStyles.TableHeaderLabel);
-            GUI.Label(WindowUtils.TableCellRect(ref tableCursor, WindowUtils.TypeColumnWidth, rowRect), "Type",
-                WindowStyles.TableHeaderLabel);
-            GUI.Label(WindowUtils.TableCellRect(ref tableCursor, WindowUtils.IsListColumnWidth, rowRect), "Is List",
-                WindowStyles.TableHeaderLabel);
-            GUI.Label(WindowUtils.TableCellRect(ref tableCursor, WindowUtils.SeparatorCharColumnWidth, rowRect),
-                "Separator", WindowStyles.TableHeaderLabel);
+            GUI.Label(UIUtils.TableCellRect(ref tableCursor, UIUtils.NameColumnWidth, rowRect), "Field Name",
+                UIUtils.TableHeaderLabel);
+            GUI.Label(UIUtils.TableCellRect(ref tableCursor, UIUtils.TypeColumnWidth, rowRect), "Type",
+                UIUtils.TableHeaderLabel);
+            GUI.Label(UIUtils.TableCellRect(ref tableCursor, UIUtils.IsListColumnWidth, rowRect), "Is List",
+                UIUtils.TableHeaderLabel);
+            GUI.Label(UIUtils.TableCellRect(ref tableCursor, UIUtils.SeparatorCharColumnWidth, rowRect),
+                "Separator", UIUtils.TableHeaderLabel);
             
             // Fields table
             
@@ -245,30 +245,30 @@ namespace ScriptableObjectsFromSheets.ScriptableObjectBuilder.Interface
             var backgroundColor = index % 2 == 0 ? Color.gray2 : _defaultBackgroundColor;
             EditorGUI.DrawRect(rowRect, backgroundColor);
             
-            float tableCursor = rowRect.x + WindowUtils.CellPadding;
+            float tableCursor = rowRect.x + UIUtils.CellPadding;
             
-            field.Name = EditorGUI.TextField(WindowUtils.TableCellRect(ref tableCursor, WindowUtils.NameColumnWidth, rowRect), field.Name);
+            field.Name = EditorGUI.TextField(UIUtils.TableCellRect(ref tableCursor, UIUtils.NameColumnWidth, rowRect), field.Name);
             
             field.Type = _availableTypes[
                 EditorGUI.Popup(
-                    WindowUtils.TableCellRect(ref tableCursor, WindowUtils.TypeColumnWidth, rowRect),
+                    UIUtils.TableCellRect(ref tableCursor, UIUtils.TypeColumnWidth, rowRect),
                     _availableTypes.IndexOf(field.Type),
                     _availableTypes.ToArray())
             ];
             
-            field.IsList = EditorGUI.Toggle(WindowUtils.TableCellRect(ref tableCursor, WindowUtils.IsListColumnWidth, rowRect), field.IsList);
+            field.IsList = EditorGUI.Toggle(UIUtils.TableCellRect(ref tableCursor, UIUtils.IsListColumnWidth, rowRect), field.IsList);
 
             if (field.IsList)
             {
-                field.ListSeparator = EditorGUI.TextField(WindowUtils.TableCellRect(ref tableCursor, WindowUtils.IsListColumnWidth, rowRect), field.ListSeparator.ToString())[0];
+                field.ListSeparator = EditorGUI.TextField(UIUtils.TableCellRect(ref tableCursor, UIUtils.IsListColumnWidth, rowRect), field.ListSeparator.ToString())[0];
             }
             else
             {
-                EditorGUI.DrawRect(WindowUtils.TableCellRect(ref tableCursor, WindowUtils.SeparatorCharColumnWidth, rowRect), backgroundColor);                 
+                EditorGUI.DrawRect(UIUtils.TableCellRect(ref tableCursor, UIUtils.SeparatorCharColumnWidth, rowRect), backgroundColor);                 
             }
 
             GUI.color = Color.red;
-            bool delete = GUI.Button(WindowUtils.TableCellRect(ref tableCursor, WindowUtils.DeleteButtonColumnWidth, rowRect), "X");
+            bool delete = GUI.Button(UIUtils.TableCellRect(ref tableCursor, UIUtils.DeleteButtonColumnWidth, rowRect), "X");
             GUI.color = _defaultGUIColor;
 
             return delete;
@@ -280,7 +280,7 @@ namespace ScriptableObjectsFromSheets.ScriptableObjectBuilder.Interface
         /// </summary>
         private void DrawClassPreview()
         {
-            EditorGUILayout.LabelField("Class Preview", WindowStyles.SectionLabel);
+            EditorGUILayout.LabelField("Class Preview", UIUtils.SectionLabel);
             
             if (string.IsNullOrWhiteSpace(_classString)) return;
 
