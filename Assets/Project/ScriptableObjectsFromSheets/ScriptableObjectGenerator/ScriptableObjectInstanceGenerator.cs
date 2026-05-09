@@ -4,7 +4,7 @@ using SOFromSheets.Integration;
 using UnityEditor;
 using UnityEngine;
 
-namespace SOFromSheets.SOBuilder
+namespace ScriptableObjectsFromSheets.ScriptableObjectManager
 {
     public static class ScriptableObjectInstanceGenerator
     {

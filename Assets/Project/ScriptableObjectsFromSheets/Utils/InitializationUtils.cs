@@ -3,9 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace SOFromSheets
+namespace ScriptableObjectsFromSheets.Utils
 {
-    public class InitializationUtils
+    public static class InitializationUtils
     {        
         // TODO: Let the user choose the separator string through interface windows
         public static readonly string separatorString = "@"; 
