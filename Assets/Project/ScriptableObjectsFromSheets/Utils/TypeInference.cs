@@ -6,11 +6,12 @@ namespace ScriptableObjectsFromSheets.Utils
 {
     public static class TypeInference
     {
-        private static readonly List<(String type, Func<string, bool> ParseDelegate)> TypeCandidates = new()
+        public static readonly List<(String type, Func<string, bool> ParseDelegate)> TypeCandidates = new()
         {
             ("int", data => int.TryParse(data, out _)),
             ("float", data => float.TryParse(data, out _)),
-            ("bool", data => bool.TryParse(data, out _))
+            ("bool", data => bool.TryParse(data, out _)),
+            ("string", data => true)
         };
         
         /// <summary>
