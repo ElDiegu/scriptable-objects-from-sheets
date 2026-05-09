@@ -76,3 +76,6 @@ Assets/Project/Credentials/Key.txt
 Assets/Project/Credentials/Key.txt.meta
 Assets/Project/Credentials/AccountID.txt
 Assets/Project/Credentials/AccountID.txt.meta
+
+# Rider configuration files
+/.idea/*
