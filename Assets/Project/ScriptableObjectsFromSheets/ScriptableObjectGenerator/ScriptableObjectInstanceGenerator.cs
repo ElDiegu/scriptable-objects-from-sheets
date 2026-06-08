@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Project.SO_Builder;
 using SOFromSheets.Controllers;
 using SOFromSheets.Integration;
 using UnityEditor;
@@ -15,16 +16,18 @@ namespace ScriptableObjectsFromSheets.ScriptableObjectManager
                 T asset = ScriptableObject.CreateInstance<T>();
                 asset.Initialize(data[0], data[i]);
 
+                Debug.Log(typeof(T));
+
                 AssetDatabase.CreateAsset(asset, path + $"/{typeof(T).ToString().Split('.')[1]}_{i}.asset");
                 AssetDatabase.SaveAssets();
             }
         }
 
-        public static void GenerateScriptableObjectsFromRange<T>(string sheetId, string range, string path) where T : ImportableSO<T>
+        public static void GenerateScriptableObjectsFromRange<T>(SheetQuery query, string outputPath) where T : ImportableSO<T>
         {
-            var data = GoogleSheetsService.GetRange(sheetId, range);
+            var data = GoogleSheetsService.GetRange(query);
 
-            GenerateScriptableObjects<T>(data, path);
+            GenerateScriptableObjects<T>(data, outputPath);
         }
     }
 }

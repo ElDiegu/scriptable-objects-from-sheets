@@ -56,6 +56,11 @@ namespace SOFromSheets.Controllers
 			
 			return values;
 		}
+
+		public static async Task<List<List<string>>> GetRangeAsync(SheetQuery query)
+		{
+			return await GetRangeAsync(query.SheetId, query.Range);
+		}
 		
 		public static void UpdateCell(string sheetId, string cell, string value) 
 	    {

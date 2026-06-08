@@ -79,10 +79,7 @@ namespace ScriptableObjectsFromSheets.ScriptableObjectBuilder.UI
             UpdateWindow();
         }
         
-        // *------ Drawing Section ------*
-        // This section contains the methods that draw different sections of the interface window.
-        // It has been decided to separate the drawing login into different methods to avoid excessive code clutter
-        // Inside the "OnGui" Unity method. This allows for better debugging and scalability.
+        #region Drawing Section
 
         /// <summary>
         /// Draws the header bar.
@@ -187,7 +184,7 @@ namespace ScriptableObjectsFromSheets.ScriptableObjectBuilder.UI
             _outputPath = EditorGUILayout.TextField(_outputPath, UIUtils.TextInputLayout);
             if (GUILayout.Button("Browse", UIUtils.ClassSetupButtonLayout))
             {
-                _outputPath = InterfaceUtils.ChooseOutputPath(_outputPath);
+                _outputPath = PathUtils.ChoosePath(_outputPath);
             }
             EditorGUILayout.EndHorizontal();
             
@@ -220,6 +217,8 @@ namespace ScriptableObjectsFromSheets.ScriptableObjectBuilder.UI
                 UIUtils.TableHeaderLabel);
             GUI.Label(UIUtils.TableCellRect(ref tableCursor, UIUtils.SeparatorCharColumnWidth, rowRect),
                 "Separator", UIUtils.TableHeaderLabel);
+            GUI.Label(UIUtils.TableCellRect(ref tableCursor, UIUtils.IsListColumnWidth, rowRect),
+                "Imported", UIUtils.TableHeaderLabel);
             
             // Fields table
             
@@ -266,6 +265,8 @@ namespace ScriptableObjectsFromSheets.ScriptableObjectBuilder.UI
             {
                 EditorGUI.DrawRect(UIUtils.TableCellRect(ref tableCursor, UIUtils.SeparatorCharColumnWidth, rowRect), backgroundColor);                 
             }
+            
+            field.IsSheetImported = EditorGUI.Toggle(UIUtils.TableCellRect(ref tableCursor, UIUtils.IsListColumnWidth, rowRect), field.IsSheetImported);
 
             GUI.color = Color.red;
             bool delete = GUI.Button(UIUtils.TableCellRect(ref tableCursor, UIUtils.DeleteButtonColumnWidth, rowRect), "X");
@@ -317,7 +318,9 @@ namespace ScriptableObjectsFromSheets.ScriptableObjectBuilder.UI
             EditorGUI.EndDisabledGroup();
         }
         
-        // *------ Other Methods ------*
+        #endregion
+        
+        #region Other Methods
 
         private void ProcessSheet()
         {
@@ -361,5 +364,7 @@ namespace ScriptableObjectsFromSheets.ScriptableObjectBuilder.UI
             
             Repaint();
         }
+        
+        #endregion
     }
 }

@@ -11,6 +11,8 @@ namespace ScriptableObjectsFromSheets.Utils
         public const float SeparatorCharColumnWidth = 50f;
         public const float DeleteButtonColumnWidth = 20f;
         public const float CellPadding = 5f;
+        
+        public static Color DefaultGUIColor =  new Color(0.22f, 0.22f, 0.22f);
 
         public static Rect TableCellRect(ref float tableCursor, float width, Rect row)
         {
@@ -71,5 +73,13 @@ namespace ScriptableObjectsFromSheets.Utils
             fontStyle = FontStyle.Bold,
             normal = { textColor = Color.gray6 }
         };
+        
+        // Helper Methods
+        
+        public static bool SheetDataIsValid(string sheetUrl, string sheetName, string range)
+        {
+            return sheetUrl.Contains("https://docs.google.com/spreadsheets/d/") &&
+                   !string.IsNullOrWhiteSpace(sheetName) && range.Contains(":");
+        }
     }
 }
