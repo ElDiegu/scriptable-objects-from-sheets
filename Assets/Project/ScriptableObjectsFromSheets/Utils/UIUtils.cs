@@ -81,5 +81,20 @@ namespace ScriptableObjectsFromSheets.Utils
             return sheetUrl.Contains("https://docs.google.com/spreadsheets/d/") &&
                    !string.IsNullOrWhiteSpace(sheetName) && range.Contains(":");
         }
+        
+        // Reused drawing methods
+        
+        public static void DrawHeaderBar(string label)
+        {
+            var headerRect = EditorGUILayout.GetControlRect(false, 30);
+            EditorGUI.DrawRect(headerRect, Color.gray1);
+            
+            var iconRect = new Rect(headerRect.x + 5, headerRect.y + 5, 20, 20);
+            var labelRect = new Rect(iconRect.xMax + 8, headerRect.y, headerRect.width, headerRect.height);
+            
+            EditorGUI.DrawRect(iconRect, Color.dodgerBlue);
+            GUI.Label(iconRect, EditorGUIUtility.IconContent("ScriptableObject Icon").image, EditorStyles.label);
+            GUI.Label(labelRect, label, Header);
+        }
     }
 }

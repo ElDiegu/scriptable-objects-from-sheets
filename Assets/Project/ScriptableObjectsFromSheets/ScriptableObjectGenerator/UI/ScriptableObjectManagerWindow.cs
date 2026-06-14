@@ -4,12 +4,9 @@ using System.Linq;
 using System.Reflection;
 using Project.SO_Builder;
 using ScriptableObjectsFromSheets.Extensions;
-using ScriptableObjectsFromSheets.Test;
 using ScriptableObjectsFromSheets.Utils;
-using SOFromSheets.Controllers;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace ScriptableObjectsFromSheets.ScriptableObjectManager.UI
 {
