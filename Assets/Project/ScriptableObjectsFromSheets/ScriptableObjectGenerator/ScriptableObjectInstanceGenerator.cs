@@ -1,10 +1,10 @@
 using System.Collections.Generic;
-using SOFromSheets.Controllers;
-using SOFromSheets.Integration;
+using Project.SO_Builder;
+using ScriptableObjectsFromSheets.APIIntegration;
 using UnityEditor;
 using UnityEngine;
 
-namespace SOFromSheets.SOBuilder
+namespace ScriptableObjectsFromSheets.ScriptableObjectManager
 {
     public static class ScriptableObjectInstanceGenerator
     {
@@ -20,11 +20,11 @@ namespace SOFromSheets.SOBuilder
             }
         }
 
-        public static void GenerateScriptableObjectsFromRange<T>(string sheetId, string range, string path) where T : ImportableSO<T>
+        public static void GenerateScriptableObjectsFromRange<T>(SheetQuery query, string outputPath) where T : ImportableSO<T>
         {
-            var data = GoogleSheetsService.GetRange(sheetId, range);
+            var data = GoogleSheetsService.GetRange(query);
 
-            GenerateScriptableObjects<T>(data, path);
+            GenerateScriptableObjects<T>(data, outputPath);
         }
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Google.Apis.Auth.OAuth2;
@@ -7,10 +8,9 @@ using Google.Apis.Services;
 using Google.Apis.Sheets.v4;
 using Google.Apis.Sheets.v4.Data;
 using Project.SO_Builder;
-using SOFromSheets.Integration;
 using UnityEngine;
 
-namespace SOFromSheets.Controllers
+namespace ScriptableObjectsFromSheets.APIIntegration
 {
 	/// <summary>
 	/// Class where all Sheets API operations are handled.
@@ -19,15 +19,21 @@ namespace SOFromSheets.Controllers
 	{
 		private static readonly SheetsService _service;
 		
-		static GoogleSheetsService() 
+		static GoogleSheetsService()
 		{
-		    ServiceAccountCredential.Initializer initializer = new ServiceAccountCredential.Initializer(AccountParameters.ServiceAccountID);
-
-			ServiceAccountCredential credential = new ServiceAccountCredential(initializer.FromPrivateKey(AccountParameters.PrivateKey));
+			ServiceAccountCredential credential;
+			using (var stream =
+			       new FileStream(AccountParameters.ServiceAccountJsonPath, FileMode.Open, FileAccess.Read))
+			{
+				credential = (ServiceAccountCredential)GoogleCredential.FromStream(stream)
+					.CreateScoped(SheetsService.Scope.Spreadsheets)
+					.UnderlyingCredential; 
+			}
 			
 			BaseClientService.Initializer baseServiceInitializer = new BaseClientService.Initializer() 
 			{
-				HttpClientInitializer = credential
+				HttpClientInitializer = credential,
+				ApplicationName = "ScriptableObjectsFromSheets"
 			};
 			
 			_service = new SheetsService(baseServiceInitializer);
@@ -55,6 +61,11 @@ namespace SOFromSheets.Controllers
 			List<List<string>> values = response.Values.Select(row => row.Select(cell => cell?.ToString() ?? string.Empty).ToList()).ToList();
 			
 			return values;
+		}
+
+		public static async Task<List<List<string>>> GetRangeAsync(SheetQuery query)
+		{
+			return await GetRangeAsync(query.SheetId, query.Range);
 		}
 		
 		public static void UpdateCell(string sheetId, string cell, string value) 
