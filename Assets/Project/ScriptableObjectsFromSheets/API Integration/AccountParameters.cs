@@ -17,37 +17,5 @@ namespace ScriptableObjectsFromSheets.APIIntegration
 			PlayerPrefs.SetString(PlayerPrefsKey, path);
 			ServiceAccountJsonPath = PlayerPrefs.GetString(PlayerPrefsKey, "");
 		}
-
-		public static string ServiceAccountID { 
-			get 
-			{
-				try 
-				{
-				    StreamReader sr = new StreamReader(Path.Combine(Application.dataPath, ServiceAccountJsonPath, "AccountID.txt"));
-					return sr.ReadLine();
-				}
-				catch (Exception exception) 
-				{
-				    Debug.LogException(exception);
-					return null;
-				}
-			}
-		}
-
-		public static string PrivateKey { 
-			get 
-			{
-				try 
-				{
-				    StreamReader sr = new StreamReader(Path.Combine(Application.dataPath, ServiceAccountJsonPath, "Key.txt"));
-					return sr.ReadLine().Replace("\\n", "\n");
-				}
-				catch (Exception exception) 
-				{
-				    Debug.LogException(exception);
-					return null;
-				}
-			}
-		}
 	}
 }

@@ -35,6 +35,7 @@ namespace ScriptableObjectsFromSheets.ScriptableObjectManager
                 try 
                 {
                     string headerName = members[i].GetCustomAttribute<SheetImportedAttribute>().HeaderName;
+                    char separator = members[i].GetCustomAttribute<SheetImportedAttribute>().Separator;
                     int headerIndex = InitializationUtils.FindMemberIndex(headerName, headers);
                     
                     Debug.Log($"{headerIndex} | {headerName}");
@@ -43,12 +44,12 @@ namespace ScriptableObjectsFromSheets.ScriptableObjectManager
                     
                     if (members[i].MemberType == MemberTypes.Field) 
                     {
-                        object convertedValue = InitializationUtils.TypeConverter(data[headerIndex], ((FieldInfo)members[i]).FieldType); 
+                        object convertedValue = InitializationUtils.TypeConverter(data[headerIndex], ((FieldInfo)members[i]).FieldType, separator); 
                         ((FieldInfo)members[i]).SetValue(this, convertedValue);
                     }   
                     else if (members[i].MemberType == MemberTypes.Property)
                     {
-                        object convertedValue = InitializationUtils.TypeConverter(data[headerIndex], ((PropertyInfo)members[i]).PropertyType); 
+                        object convertedValue = InitializationUtils.TypeConverter(data[headerIndex], ((PropertyInfo)members[i]).PropertyType, separator); 
                         ((PropertyInfo)members[i]).SetValue(this, convertedValue);
                     }
                 }

@@ -13,7 +13,6 @@ namespace ScriptableObjectsFromSheets.ScriptableObjectBuilder.UI
     {
         // Main variables
         private Color _defaultGUIColor;
-        private Color _defaultBackgroundColor;
         private List<string> _availableTypes;
         
         // Spreadsheet variables
@@ -49,8 +48,9 @@ namespace ScriptableObjectsFromSheets.ScriptableObjectBuilder.UI
         {
             _className = EditorSettings.projectGenerationRootNamespace;
             _defaultGUIColor = GUI.backgroundColor;
-            _defaultBackgroundColor = new Color(0.22f, 0.22f, 0.22f);
             _availableTypes = TypeInference.TypeCandidates.Select(typeCandidate => typeCandidate.type).ToList();
+            _classString = "";
+            _classNamespace = EditorSettings.projectGenerationRootNamespace;
         }
 
         private void OnGUI()
@@ -157,6 +157,16 @@ namespace ScriptableObjectsFromSheets.ScriptableObjectBuilder.UI
             _className = EditorGUILayout.TextField(_className, UIUtils.TextInputLayout);
             EditorGUILayout.EndHorizontal();
             
+            // Output Path
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("Output Path", GUILayout.Width(EditorGUIUtility.labelWidth));
+            _outputPath = EditorGUILayout.TextField(_outputPath, UIUtils.TextInputLayout);
+            if (GUILayout.Button("Browse", UIUtils.ClassSetupButtonLayout))
+            {
+                _outputPath = PathUtils.ChoosePath(_outputPath);
+            }
+            EditorGUILayout.EndHorizontal();
+            
             // Namespace
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("Namespace", GUILayout.Width(EditorGUIUtility.labelWidth));
@@ -176,16 +186,6 @@ namespace ScriptableObjectsFromSheets.ScriptableObjectBuilder.UI
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("File name", GUILayout.Width(EditorGUIUtility.labelWidth));;
             _fileName = EditorGUILayout.TextField(_fileName, UIUtils.TextInputLayout);
-            EditorGUILayout.EndHorizontal();
-            
-            // Output Path
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("Output Path", GUILayout.Width(EditorGUIUtility.labelWidth));
-            _outputPath = EditorGUILayout.TextField(_outputPath, UIUtils.TextInputLayout);
-            if (GUILayout.Button("Browse", UIUtils.ClassSetupButtonLayout))
-            {
-                _outputPath = PathUtils.ChoosePath(_outputPath);
-            }
             EditorGUILayout.EndHorizontal();
             
             EditorGUI.EndDisabledGroup();

@@ -35,8 +35,8 @@ namespace ScriptableObjectsFromSheets.ScriptableObjectBuilder
 
             foreach (ClassField field in classFields)
             {
-                if (field.IsSheetImported) sb.AppendLineWithIndent($"[SheetImported(\"{field.Name}\")]", indentLevel);
-                sb.AppendLineWithIndent($"{field.ToString()}", indentLevel);
+                if (field.IsSheetImported) sb.AppendLineWithIndent(field.AttributeDeclaration, indentLevel);
+                sb.AppendLineWithIndent(field.FieldDeclaration, indentLevel);
             }
 
             indentLevel--;
@@ -90,7 +90,8 @@ namespace ScriptableObjectsFromSheets.ScriptableObjectBuilder
             ListSeparator = ',';     
             IsSheetImported = true;     
         }
-
-        public override string ToString() => $"public {(IsList ? $"List<{Type}>" : Type)} {Name};";
+        
+        public string FieldDeclaration => $"public {(IsList ? $"List<{Type}>" : Type)} {Name};";
+        public string AttributeDeclaration => $"[SheetImported(\"{Name}\"{(IsList ? $", \"{ListSeparator}\"" : "")}]";
     }
 }
