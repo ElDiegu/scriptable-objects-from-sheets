@@ -7,7 +7,7 @@ using Google.Apis.Auth.OAuth2;
 using Google.Apis.Services;
 using Google.Apis.Sheets.v4;
 using Google.Apis.Sheets.v4.Data;
-using Project.SO_Builder;
+using ScriptableObjectsFromSheets.Core;
 using UnityEngine;
 
 namespace ScriptableObjectsFromSheets.APIIntegration
@@ -50,7 +50,16 @@ namespace ScriptableObjectsFromSheets.APIIntegration
 
 		public static List<List<string>> GetRange(SheetQuery query)
 		{
-			return GetRange(query.SheetId, query.Range);
+			try
+			{
+				return GetRange(query.SheetId, query.Range);
+			}
+			catch (Exception e)
+			{
+				Debug.LogError($"Error while loading Sheet data: {e.Message}");
+			}
+
+			return null;
 		}
 		
 		public static async Task<List<List<string>>> GetRangeAsync(string sheetId, string range) 

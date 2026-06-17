@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace SOFromSheets.Extensions
+namespace ScriptableObjectsFromSheets.Extensions
 {
     public static class StringBuilderExtensions
     {

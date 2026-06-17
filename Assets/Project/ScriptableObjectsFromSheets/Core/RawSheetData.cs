@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ScriptableObjectsFromSheets.Utils;
 
-namespace Project.SO_Builder
+namespace ScriptableObjectsFromSheets.Core
 {
     /// <summary>
     /// Raw data from the queried sheet range.

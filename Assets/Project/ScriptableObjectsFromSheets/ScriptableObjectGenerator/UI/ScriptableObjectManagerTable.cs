@@ -2,12 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using ScriptableObjectsFromSheets.ScriptableObjectManager.Attributes;
+using ScriptableObjectsFromSheets.Core;
+using ScriptableObjectsFromSheets.Utils;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 
-namespace ScriptableObjectsFromSheets.Utils
+namespace ScriptableObjectsFromSheets.ScriptableObjectGenerator.UI
 {
     public class ScriptableObjectManagerTable
     {

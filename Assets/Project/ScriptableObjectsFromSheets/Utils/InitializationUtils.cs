@@ -6,12 +6,10 @@ using UnityEngine;
 namespace ScriptableObjectsFromSheets.Utils
 {
     public static class InitializationUtils
-    {        
-        // TODO: Let the user choose the separator string through interface windows
-        public static readonly string separatorString = "@"; 
+    {
         public static int FindMemberIndex(string name, List<string> headers) => headers.IndexOf(name);
         
-        public static object TypeConverter(string value, Type conversionType) 
+        public static object TypeConverter(string value, Type conversionType, char separator) 
         {
             if (conversionType == typeof(bool)) 
             {
@@ -23,9 +21,9 @@ namespace ScriptableObjectsFromSheets.Utils
             {
                 Type enumerableType = conversionType.GetInterface("IEnumerable`1").GetGenericArguments()[0];
                 
-                // Initialize a List of the desired type to store all elements from the Enumerable as desired type
+                // Initialize a List of the desired type to store all elements from the Enumerable
                 IList elementList = (IList)Activator.CreateInstance(typeof(List<>).MakeGenericType(enumerableType));
-                foreach (string element in value.Split(separatorString)) elementList.Add(TypeConverter(element, enumerableType));
+                foreach (string element in value.Split(separator)) elementList.Add(TypeConverter(element, enumerableType, separator));
                 
                 return Activator.CreateInstance(conversionType, elementList);
             }

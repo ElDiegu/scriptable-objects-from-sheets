@@ -1,10 +1,10 @@
 using System.Collections.Generic;
-using Project.SO_Builder;
 using ScriptableObjectsFromSheets.APIIntegration;
+using ScriptableObjectsFromSheets.Core;
 using UnityEditor;
 using UnityEngine;
 
-namespace ScriptableObjectsFromSheets.ScriptableObjectManager
+namespace ScriptableObjectsFromSheets.ScriptableObjectGenerator
 {
     public static class ScriptableObjectInstanceGenerator
     {

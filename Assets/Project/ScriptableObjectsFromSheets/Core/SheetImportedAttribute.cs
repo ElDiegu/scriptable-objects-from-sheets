@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace ScriptableObjectsFromSheets.ScriptableObjectManager.Attributes
+namespace ScriptableObjectsFromSheets.Core
 {
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
     public class SheetImportedAttribute : Attribute
@@ -11,9 +11,15 @@ namespace ScriptableObjectsFromSheets.ScriptableObjectManager.Attributes
         /// </summary>
         public string HeaderName { get; }
         
-        public SheetImportedAttribute(string headerName) 
+        /// <summary>
+        /// Stores the declared separator for List types. @ is default.
+        /// </summary>
+        public char Separator { get; }
+        
+        public SheetImportedAttribute(string headerName, char separator = '@') 
         {
             HeaderName = headerName;
+            Separator = separator;
         }
     }
 }
