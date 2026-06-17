@@ -2,13 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Project.SO_Builder;
+using ScriptableObjectsFromSheets.Core;
 using ScriptableObjectsFromSheets.Extensions;
 using ScriptableObjectsFromSheets.Utils;
 using UnityEditor;
 using UnityEngine;
 
-namespace ScriptableObjectsFromSheets.ScriptableObjectManager.UI
+namespace ScriptableObjectsFromSheets.ScriptableObjectGenerator.UI
 {
     public class ScriptableObjectManagerWindow : EditorWindow
     {
@@ -56,7 +56,7 @@ namespace ScriptableObjectsFromSheets.ScriptableObjectManager.UI
             
             DrawScriptableObjectSelection();
             
-            DrawSheetSelectionFoldout();
+            if (_targetClass != null) DrawSheetSelectionFoldout();
 
             if (_dataTable != null) DrawScriptableObjectInstances();
             

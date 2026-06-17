@@ -2,11 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using ScriptableObjectsFromSheets.ScriptableObjectManager.Attributes;
 using ScriptableObjectsFromSheets.Utils;
 using UnityEngine;
 
-namespace ScriptableObjectsFromSheets.ScriptableObjectManager
+namespace ScriptableObjectsFromSheets.Core
 {
     /// <summary>
     /// Interface required for the SOFromSheets extension to work. Scriptable Objects must inherit from this class to

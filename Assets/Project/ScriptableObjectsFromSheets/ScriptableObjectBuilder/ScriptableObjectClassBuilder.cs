@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using SOFromSheets.Extensions;
+using ScriptableObjectsFromSheets.Extensions;
 using UnityEditor;
 
 namespace ScriptableObjectsFromSheets.ScriptableObjectBuilder

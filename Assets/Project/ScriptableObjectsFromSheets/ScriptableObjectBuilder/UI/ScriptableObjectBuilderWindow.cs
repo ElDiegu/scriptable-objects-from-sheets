@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Project.SO_Builder;
 using ScriptableObjectsFromSheets.Utils;
 using ScriptableObjectsFromSheets.APIIntegration;
+using ScriptableObjectsFromSheets.Core;
 using UnityEditor;
 using UnityEngine;
 
@@ -205,7 +205,7 @@ namespace ScriptableObjectsFromSheets.ScriptableObjectBuilder.UI
             GUILayout.EndHorizontal();
             
             Rect rowRect = EditorGUILayout.GetControlRect(false, 18);
-            EditorGUI.DrawRect(rowRect, _defaultBackgroundColor);
+            EditorGUI.DrawRect(rowRect, UIUtils.DefaultGUIColor);
 
             float tableCursor = rowRect.x + UIUtils.CellPadding;
 
@@ -241,7 +241,7 @@ namespace ScriptableObjectsFromSheets.ScriptableObjectBuilder.UI
             Rect rowRect = EditorGUILayout.GetControlRect(false, 22);
             
             // Alternate row color
-            var backgroundColor = index % 2 == 0 ? Color.gray2 : _defaultBackgroundColor;
+            var backgroundColor = index % 2 == 0 ? Color.gray2 : UIUtils.DefaultGUIColor;
             EditorGUI.DrawRect(rowRect, backgroundColor);
             
             float tableCursor = rowRect.x + UIUtils.CellPadding;

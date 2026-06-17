@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace ScriptableObjectsFromSheets.ScriptableObjectManager.Attributes
+namespace ScriptableObjectsFromSheets.Core
 {
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
     public class SheetImportedAttribute : Attribute
