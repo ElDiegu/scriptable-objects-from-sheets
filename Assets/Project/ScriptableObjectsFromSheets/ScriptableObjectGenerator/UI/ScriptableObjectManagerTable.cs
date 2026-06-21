@@ -42,7 +42,9 @@ namespace ScriptableObjectsFromSheets.ScriptableObjectGenerator.UI
             Rect rowRect = new Rect(0, headerPointer, totalWidth, RowHeight);
             EditorGUI.DrawRect(rowRect, Color.gray2);
 
-            float cellPointer = rowRect.x;
+            // Synchronize headers with body, since the headers are not affected by the
+            // body ScrollView
+            float cellPointer = - _bodyScroll.x;
             
             for (int i = 0; i < headers.Length; i++)
             {
@@ -115,7 +117,7 @@ namespace ScriptableObjectsFromSheets.ScriptableObjectGenerator.UI
                 else if (member is PropertyInfo) ((PropertyInfo)member).SetValue(so, newValue);
             }
         }
-        
+
         private Rect GetCellRect(ref float cellPointer, float width, Rect row)
         {
             Rect cellRect = new Rect(cellPointer, row.y, width, row.height);
