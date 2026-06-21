@@ -51,6 +51,7 @@ namespace ScriptableObjectsFromSheets.APIIntegration
             {
                 AccountParameters.UpdateServiceAccountJsonPath(_credentialsPath);
                 EditorUtility.DisplayDialog("Success", "Credential file path successfully saved.\n\nRemember to update file path through this screen if you change file location.", "OK");
+                GoogleSheetsService.ResetService();
             }
             GUI.enabled = true;
             EditorGUILayout.EndHorizontal();
