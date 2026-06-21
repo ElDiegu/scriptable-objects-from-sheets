@@ -55,7 +55,7 @@ namespace ScriptableObjectsFromSheets.ScriptableObjectBuilder.UI
 
         private void OnGUI()
         {
-            DrawHeaderBar();
+            UIUtils.DrawHeaderBar("Scriptable Object from Sheets Builder");
             UIUtils.DrawHorizontalLine(Color.dimGray);
             
             EditorGUILayout.BeginHorizontal();
@@ -80,22 +80,6 @@ namespace ScriptableObjectsFromSheets.ScriptableObjectBuilder.UI
         }
         
         #region Drawing Section
-
-        /// <summary>
-        /// Draws the header bar.
-        /// </summary>
-        private void DrawHeaderBar()
-        {
-            var headerRect = EditorGUILayout.GetControlRect(false, 30);
-            EditorGUI.DrawRect(headerRect, Color.gray1);
-            
-            var iconRect = new Rect(headerRect.x + 5, headerRect.y + 5, 20, 20);
-            var labelRect = new Rect(iconRect.xMax + 8, headerRect.y, headerRect.width, headerRect.height);
-            
-            EditorGUI.DrawRect(iconRect, Color.dodgerBlue);
-            GUI.Label(iconRect, EditorGUIUtility.IconContent("ScriptableObject Icon").image, EditorStyles.label);
-            GUI.Label(labelRect, "Scriptable Object from Sheets Builder", UIUtils.Header);
-        }
 
         /// <summary>
         /// Draws the necessary information to query Google Sheets data.

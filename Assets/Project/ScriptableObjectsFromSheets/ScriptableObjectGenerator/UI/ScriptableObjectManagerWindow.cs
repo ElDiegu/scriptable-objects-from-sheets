@@ -52,7 +52,7 @@ namespace ScriptableObjectsFromSheets.ScriptableObjectGenerator.UI
 
         private void OnGUI()
         {
-            DrawHeaderBar();
+            UIUtils.DrawHeaderBar("Scriptable Object from Sheets Manager");
             
             DrawScriptableObjectSelection();
             
@@ -64,19 +64,6 @@ namespace ScriptableObjectsFromSheets.ScriptableObjectGenerator.UI
         }
         
         #region Drawing Section
-        
-        private void DrawHeaderBar()
-        {
-            var headerRect = EditorGUILayout.GetControlRect(false, 30);
-            EditorGUI.DrawRect(headerRect, Color.gray1);
-            
-            var iconRect = new Rect(headerRect.x + 5, headerRect.y + 5, 20, 20);
-            var labelRect = new Rect(iconRect.xMax + 8, headerRect.y, headerRect.width, headerRect.height);
-            
-            EditorGUI.DrawRect(iconRect, Color.dodgerBlue);
-            GUI.Label(iconRect, EditorGUIUtility.IconContent("ScriptableObject Icon").image, EditorStyles.label);
-            GUI.Label(labelRect, "Scriptable Object from Sheets Manager", UIUtils.Header);
-        }
 
         private void DrawScriptableObjectSelection()
         {

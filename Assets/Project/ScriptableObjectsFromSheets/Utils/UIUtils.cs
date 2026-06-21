@@ -1,3 +1,4 @@
+using ScriptableObjectsFromSheets.APIIntegration;
 using UnityEditor;
 using UnityEngine;
 
@@ -92,7 +93,7 @@ namespace ScriptableObjectsFromSheets.Utils
             var iconRect = new Rect(headerRect.x + 5, headerRect.y + 5, 20, 20);
             var labelRect = new Rect(iconRect.xMax + 8, headerRect.y, headerRect.width, headerRect.height);
             
-            EditorGUI.DrawRect(iconRect, Color.dodgerBlue);
+            EditorGUI.DrawRect(iconRect, GoogleSheetsService._serviceInitialized ? Color.dodgerBlue : Color.softRed);
             GUI.Label(iconRect, EditorGUIUtility.IconContent("ScriptableObject Icon").image, EditorStyles.label);
             GUI.Label(labelRect, label, Header);
         }

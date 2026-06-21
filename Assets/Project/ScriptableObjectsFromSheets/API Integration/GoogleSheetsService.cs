@@ -18,6 +18,7 @@ namespace ScriptableObjectsFromSheets.APIIntegration
 	public class GoogleSheetsService
 	{
 		private static SheetsService _service;
+		public static bool _serviceInitialized;
 		
 		static GoogleSheetsService()
 		{
@@ -54,10 +55,12 @@ namespace ScriptableObjectsFromSheets.APIIntegration
 			
 				_service = new SheetsService(baseServiceInitializer);
 				Debug.Log($"Sheets Service successfully initialized. You can now use ScriptableObjects from Sheets.");
+				_serviceInitialized = true;
 			}
 			catch (Exception e)
 			{
 				Debug.LogError($"Error {e.Message} while initializing Google Sheets service.");
+				_serviceInitialized = false;
 			}
 		}
 
