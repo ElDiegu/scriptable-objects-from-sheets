@@ -8,7 +8,7 @@ using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 
-namespace ScriptableObjectsFromSheets.ScriptableObjectGenerator.UI
+namespace ScriptableObjectsFromSheets.UI
 {
     public class ScriptableObjectManagerTable
     {
@@ -35,30 +35,42 @@ namespace ScriptableObjectsFromSheets.ScriptableObjectGenerator.UI
             foreach (Type type in types) ColumnWidths.Add(MinWidthByType(type));
         }
 
-        public void DrawHeaders(float headerPointer, float windowWidth, string[] headers, List<MemberInfo> members)
+        public void DrawHeaders(float headerPointer, Rect contentRect, float windowWidth, string[] headers, List<MemberInfo> members)
         {
-            var totalWidth = Mathf.Max(ColumnWidths.Sum() + CellPadding * (ColumnWidths.Count - 1), windowWidth);
-            
-            Rect rowRect = new Rect(0, headerPointer, totalWidth, RowHeight);
+            // The header background only covers the visible content area (it must not paint over the sidebar)
+            Rect rowRect = new Rect(contentRect.x, headerPointer, windowWidth, RowHeight);
             EditorGUI.DrawRect(rowRect, Color.gray2);
 
             // Synchronize headers with body, since the headers are not affected by the
-            // body ScrollView
-            float cellPointer = - _bodyScroll.x;
-            
+            // body ScrollView. The body starts at contentRect.x, so the headers must too.
+            // Labels are drawn inside a clip so they can't spill over the sidebar when scrolled horizontally.
+            // Inside the clip, coordinates are local to rowRect.
+            GUI.BeginClip(rowRect);
+            Rect localRow = new Rect(0, 0, rowRect.width, rowRect.height);
+            float localPointer = -_bodyScroll.x;
+
             for (int i = 0; i < headers.Length; i++)
             {
                 if (members[i].HasAttribute<SheetImportedAttribute>()) headers[i] = $"{headers[i]}📥";
-                
+
                 // We get the width of the header label to adjust column size to it
                 float labelWidth = GUI.skin.label.CalcSize(new GUIContent(headers[i])).x;
                 ColumnWidths[i] = Mathf.Max(labelWidth, ColumnWidths[i]);
-                
-                Rect headerCellRect = GetCellRect(ref cellPointer, ColumnWidths[i], rowRect);
+
+                Rect headerCellRect = GetCellRect(ref localPointer, ColumnWidths[i], localRow);
                 GUI.Label(headerCellRect, headers[i], UIUtils.TableHeaderLabel);
-                
-                cellPointer += CellPadding;
-                
+
+                localPointer += CellPadding;
+            }
+            GUI.EndClip();
+
+            // Handlers extend down into the body, so they are drawn outside the clip, in window coordinates
+            float cellPointer = contentRect.x - _bodyScroll.x;
+
+            for (int i = 0; i < headers.Length; i++)
+            {
+                cellPointer += ColumnWidths[i] + CellPadding;
+
                 DrawWidthHandler(rowRect, cellPointer, i);
             }
         }
@@ -109,7 +121,7 @@ namespace ScriptableObjectsFromSheets.ScriptableObjectGenerator.UI
             Type type = member is FieldInfo ? ((FieldInfo)member).FieldType : ((PropertyInfo)member).PropertyType; 
             object value = member is FieldInfo ? ((FieldInfo)member).GetValue(so) : ((PropertyInfo)member).GetValue(so);
             
-            object newValue = DrawController(cellRect, type, value);
+            object newValue = SupportedTypesConfiguration.TypeController(cellRect, type, value);
 
             if (!Equals(value, newValue))
             {
@@ -132,7 +144,14 @@ namespace ScriptableObjectsFromSheets.ScriptableObjectGenerator.UI
             // Clickable handler to drag and resize columns
             Rect handler = new Rect(cellPointer - CellPadding / 2f - HandlerWidth / 2f, rowRect.y, HandlerWidth, RowHeight * (_rowNumber + 1));
             // EditorGUI.DrawRect(handler, Color.black);
-                
+
+            // Ignore handlers scrolled out of the visible area (e.g. under the sidebar)
+            float visibleMin = rowRect.x;
+            float visibleMax = rowRect.xMax;
+            if (handler.xMax < visibleMin || handler.x > visibleMax) return;
+            handler.xMin = Mathf.Max(handler.xMin, visibleMin);
+            handler.xMax = Mathf.Min(handler.xMax, visibleMax);
+
             // Change mouse icon when hovering
             EditorGUIUtility.AddCursorRect(handler, MouseCursor.ResizeHorizontal);
                 
@@ -168,6 +187,7 @@ namespace ScriptableObjectsFromSheets.ScriptableObjectGenerator.UI
             }
         }
 
+        /*
         private object DrawController(Rect rect, Type type, object value)
         {
             if (type == typeof(bool)) return EditorGUI.Toggle(rect, (bool)value);
@@ -179,6 +199,7 @@ namespace ScriptableObjectsFromSheets.ScriptableObjectGenerator.UI
 
             return null;
         }
+        */
 
         private float MinWidthByType(Type type)
         {

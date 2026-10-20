@@ -12,8 +12,6 @@ namespace ScriptableObjectsFromSheets.Utils
         public const float SeparatorCharColumnWidth = 50f;
         public const float DeleteButtonColumnWidth = 20f;
         public const float CellPadding = 5f;
-        
-        public static Color DefaultGUIColor =  new Color(0.22f, 0.22f, 0.22f);
 
         public static Rect TableCellRect(ref float tableCursor, float width, Rect row)
         {
@@ -33,6 +31,30 @@ namespace ScriptableObjectsFromSheets.Utils
             r.y += padding / 2;
             EditorGUI.DrawRect(r, color);
         }
+        
+        public static void DrawVerticalLine(Color color, float thickness = 1, int padding = 10)
+        {
+            Rect r = EditorGUILayout.GetControlRect(GUILayout.Width(padding + thickness));
+            r.width = thickness;
+            r.x += padding / 2;
+            EditorGUI.DrawRect(r, color);
+        }
+        
+        // Colors 
+        
+        public static Color DefaultGUIColor =  new Color(0.22f, 0.22f, 0.22f);
+        
+        public static readonly Color SelectedColor = EditorGUIUtility.isProSkin
+            ? new Color32(44, 93, 135, 255)
+            : new Color32(58, 114, 176, 255);
+
+        public static readonly Color HoverColor = EditorGUIUtility.isProSkin
+            ? new Color32(64, 64, 64, 255)
+            : new Color32(216, 216, 216, 255);
+
+        public static readonly Color BackgroundColor = EditorGUIUtility.isProSkin
+            ? new Color32(38, 38, 38, 255)
+            : new Color32(200, 200, 200, 255);
         
         // Layouts
         
@@ -73,6 +95,19 @@ namespace ScriptableObjectsFromSheets.Utils
         {
             fontStyle = FontStyle.Bold,
             normal = { textColor = Color.gray6 }
+        };
+        
+        public static readonly GUIStyle SidebarLabel = new GUIStyle(EditorStyles.label)
+        {
+            padding = new RectOffset(16, 0, 0, 0),
+            alignment = TextAnchor.MiddleLeft,
+            fontSize = 12,
+        };
+
+        public static readonly GUIStyle SelectedSidebarLabel = new GUIStyle(SidebarLabel)
+        {
+            normal = { textColor = Color.white },
+            fontStyle = FontStyle.Normal
         };
         
         // Helper Methods

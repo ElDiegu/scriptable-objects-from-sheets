@@ -3,29 +3,27 @@ using System.IO;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Services;
 using Google.Apis.Sheets.v4;
+using ScriptableObjectsFromSheets.APIIntegration;
 using ScriptableObjectsFromSheets.Utils;
 using UnityEditor;
 using UnityEngine;
 
-namespace ScriptableObjectsFromSheets.APIIntegration
+namespace ScriptableObjectsFromSheets.UI
 {
-    public class AuthWindow : EditorWindow
+    public class AuthWindow : ISOFromSheetsTab
     {
         private string _credentialsPath;
-        
-        [MenuItem("SOFromSheets/Authentication")]
-        public static void ShowWindow()
-        {
-            var window = GetWindow<AuthWindow>("Scriptable Object Manager");
-            window.minSize = new Vector2(640, 480);
-        }
 
-        private void OnEnable()
+        public string TabName => "Authentication";
+
+        public void OnEnable()
         {
             _credentialsPath = PlayerPrefs.GetString(AccountParameters.PlayerPrefsKey, "");
         }
+        
+        public void OnDisable() { }
 
-        public void OnGUI() 
+        public void OnGUI(Rect rect) 
         {
             UIUtils.DrawHeaderBar("Authentication");
             

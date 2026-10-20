@@ -4,13 +4,14 @@ using System.Linq;
 using System.Reflection;
 using ScriptableObjectsFromSheets.Core;
 using ScriptableObjectsFromSheets.Extensions;
+using ScriptableObjectsFromSheets.ScriptableObjectGenerator;
 using ScriptableObjectsFromSheets.Utils;
 using UnityEditor;
 using UnityEngine;
 
-namespace ScriptableObjectsFromSheets.ScriptableObjectGenerator.UI
+namespace ScriptableObjectsFromSheets.UI
 {
-    public class ScriptableObjectManagerWindow : EditorWindow
+    public class ScriptableObjectManagerWindow : ISOFromSheetsTab
     {
         // Main variables
         private Color _defaultGUIColor;
@@ -33,24 +34,26 @@ namespace ScriptableObjectsFromSheets.ScriptableObjectGenerator.UI
 
         private List<MemberInfo> _classMembers = new List<MemberInfo>();
         
-        [MenuItem("SOFromSheets/ScriptableObject Manager")]
-        public static void ShowWindow()
+        public string TabName => "Manager";
+        
+        private readonly EditorWindow _owner;
+        
+        public ScriptableObjectManagerWindow(EditorWindow owner)
         {
-            var window = GetWindow<ScriptableObjectManagerWindow>("Scriptable Object Manager");
-            window.minSize = new Vector2(1200, 580);
+            _owner = owner;
         }
 
-        private void OnEnable()
+        public void OnEnable()
         {
             _defaultGUIColor = GUI.backgroundColor;
         }
 
-        private void OnDisable()
+        public void OnDisable()
         {
             SaveScriptableObjectChanges();
         }
 
-        private void OnGUI()
+        public void OnGUI(Rect contentRect)
         {
             UIUtils.DrawHeaderBar("Scriptable Object from Sheets Manager");
             
@@ -58,7 +61,7 @@ namespace ScriptableObjectsFromSheets.ScriptableObjectGenerator.UI
             
             if (_targetClass != null) DrawSheetSelectionFoldout();
 
-            if (_dataTable != null) DrawScriptableObjectInstances();
+            if (_dataTable != null) DrawScriptableObjectInstances(contentRect);
             
             DrawFooter();
         }
@@ -143,13 +146,13 @@ namespace ScriptableObjectsFromSheets.ScriptableObjectGenerator.UI
             }
         }
 
-        private void DrawScriptableObjectInstances()
+        private void DrawScriptableObjectInstances(Rect rect)
         {
-            _dataTable.DrawHeaders(GUILayoutUtility.GetLastRect().yMax, position.width, _classMembers.Select(m => m.Name).ToArray(), _classMembers);
+            _dataTable.DrawHeaders(GUILayoutUtility.GetLastRect().yMax, rect, rect.width, _classMembers.Select(m => m.Name).ToArray(), _classMembers);
             
-            var availableHeight = position.height - GUILayoutUtility.GetLastRect().yMax - 30; // Minus 30 to account for the footer bar
+            var availableHeight = rect.height - GUILayoutUtility.GetLastRect().yMax - 30; // Minus 30 to account for the footer bar
             
-            Rect bodyRect = new Rect(0, GUILayoutUtility.GetLastRect().yMax, position.width, availableHeight);
+            Rect bodyRect = new Rect(rect.position.x, GUILayoutUtility.GetLastRect().yMax, rect.width, availableHeight);
 
             _dataTable.DrawTableBody(bodyRect, _scriptableObjectInstances, _classMembers, ref _dirtyScriptableObjects);;
         }
@@ -184,14 +187,9 @@ namespace ScriptableObjectsFromSheets.ScriptableObjectGenerator.UI
             {
                 // Since type arguments must be compile-tyme constant for the code to compile properly, we have to use
                 // reflection when calling our ScriptableObject generator.
+                ScriptableObjectInstanceGenerator.GenerateScriptableObjectsFromQuery(query, _folderPath, _targetType);
                 
-                MethodInfo method = typeof(ScriptableObjectInstanceGenerator)
-                    .GetMethod(nameof(ScriptableObjectInstanceGenerator.GenerateScriptableObjectsFromRange))
-                    ?.MakeGenericMethod(_targetType);
-                    
-                method.Invoke(null, new object[] {query, _folderPath});
-                
-                Repaint();
+                _owner.Repaint();
             }
             catch (Exception e)
             {
@@ -242,7 +240,7 @@ namespace ScriptableObjectsFromSheets.ScriptableObjectGenerator.UI
             
             AssetDatabase.SaveAssets();
             _dirtyScriptableObjects.Clear();
-            Repaint();
+            _owner.Repaint();
         }
     }
 }
