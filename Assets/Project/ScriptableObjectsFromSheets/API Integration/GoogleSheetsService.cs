@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
+using Google;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Services;
 using Google.Apis.Sheets.v4;
@@ -101,7 +103,7 @@ namespace ScriptableObjectsFromSheets.APIIntegration
 			}
 			catch (Exception e)
 			{
-				Debug.LogError($"Error while loading Sheet data: {e.Message}");
+				HandleLoadError(e);
 				return null;
 			}
 		}
@@ -124,7 +126,20 @@ namespace ScriptableObjectsFromSheets.APIIntegration
 		/// <returns>A 2x2 Matrix with the values from Google Sheets API as string</returns>
 		public static List<List<string>> GetRange(string sheetId, string range)
 		{
-			return GetRangeAsync(sheetId, range).Result;
+			try
+			{
+				SpreadsheetsResource.ValuesResource.GetRequest request = _service.Spreadsheets.Values.Get(sheetId, range);
+				ValueRange response = request.Execute();
+				
+				if (response == null) throw new Exception($"No values returned from query range {range} in sheet {sheetId}");
+				
+				return ConvertValuesToString(response.Values);
+			}
+			catch (Exception e)
+			{
+				HandleLoadError(e);
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -134,9 +149,46 @@ namespace ScriptableObjectsFromSheets.APIIntegration
 		/// <returns>A 2x2 Matrix with the values from Google Sheets API as string</returns>
 		public static List<List<string>> GetRange(SheetQuery query)
 		{
-			return GetRangeAsync(query.SheetId, query.Range).Result;
+			return GetRange(query.SheetId, query.Range);
 		}
 		
+		private static void HandleLoadError(Exception e)
+		{
+			Debug.LogError($"Error while loading Sheet data: {e.Message}");
+
+			if (e is GoogleApiException { HttpStatusCode: HttpStatusCode.Forbidden })
+			{
+				string serviceAccountEmail = (_service?.HttpClientInitializer as ServiceAccountCredential)?.Id;
+				string shareTarget = string.IsNullOrEmpty(serviceAccountEmail)
+					? "the Service Account email (found in your credentials JSON as \"client_email\")"
+					: serviceAccountEmail;
+
+#if UNITY_EDITOR
+				UnityEditor.EditorUtility.DisplayDialog("Permission denied",
+					"The Service Account does not have permission to access this Sheet.\n\n" +
+					$"Share the Sheet with {shareTarget} and try again.", "OK");
+#endif
+				return;
+			}
+
+			if (e is GoogleApiException { HttpStatusCode: HttpStatusCode.NotFound })
+			{
+#if UNITY_EDITOR
+				UnityEditor.EditorUtility.DisplayDialog("Sheet not found",
+					"The Spreadsheet could not be found.\n\n" +
+					"Check that the Spreadsheet URL is correct (the Spreadsheet ID inside it may be malformed) and that the Spreadsheet has not been deleted.", "OK");
+#endif
+				return;
+			}
+
+#if UNITY_EDITOR
+			UnityEditor.EditorUtility.DisplayDialog("Query failed",
+				"The query to Google Sheets failed.\n\n" +
+				"Check that the Spreadsheet URL, Sheet Name and Range are correct, and that the Sheets Service has been initialized. " +
+				"See the Console for more details.", "OK");
+#endif
+		}
+
 		public static void UpdateCell(string sheetId, string cell, string value) 
 	    {
 	        ValueRange valueRange = new ValueRange();

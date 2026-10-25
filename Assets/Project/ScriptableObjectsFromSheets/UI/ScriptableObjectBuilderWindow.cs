@@ -320,6 +320,8 @@ namespace ScriptableObjectsFromSheets.UI
             try
             {
                 var data = GoogleSheetsService.GetRange(query);
+                if (data == null) return;
+
                 RawSheetData rawSheetData = new RawSheetData(data, query);
                 _processedSheetData = new ProcessedSheetData(rawSheetData);
                 

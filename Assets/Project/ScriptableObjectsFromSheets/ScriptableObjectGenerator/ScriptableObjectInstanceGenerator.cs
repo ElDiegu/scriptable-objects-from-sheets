@@ -23,6 +23,7 @@ namespace ScriptableObjectsFromSheets.ScriptableObjectGenerator
         public static void GenerateScriptableObjectsFromRange<T>(SheetQuery query, string outputPath) where T : ImportableSO<T>
         {
             var data = GoogleSheetsService.GetRange(query);
+            if (data == null) return;
 
             GenerateScriptableObjects<T>(data, outputPath);
         }
