@@ -17,10 +17,6 @@ namespace ScriptableObjectsFromSheets.UI
         private List<string> _availableTypes;
         
         // Spreadsheet variables
-        // TODO: Remove default values for debugging
-        private static string _spreadsheetUrl = "https://docs.google.com/spreadsheets/d/1NNL6lvA7hHKdwlYU7KT7_4kYi1ZzvXTrEs0onUa-mmw/edit?gid=0#gid=0";
-        private string _sheetName = "Sheet1";
-        private string _range = "A1:F4";
         private ProcessedSheetData _processedSheetData;
         
         // Class setup variables
@@ -96,22 +92,22 @@ namespace ScriptableObjectsFromSheets.UI
             // Spreadsheet URL
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("Spreadsheet URL", GUILayout.Width(EditorGUIUtility.labelWidth));
-            _spreadsheetUrl = EditorGUILayout.TextField(_spreadsheetUrl, UIUtils.TextInputLayout);
+            SheetSelectionSettings.SpreadsheetUrl = EditorGUILayout.TextField(SheetSelectionSettings.SpreadsheetUrl, UIUtils.TextInputLayout);
             EditorGUILayout.EndHorizontal();
             
             // Sheet Name
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("Sheet Name", GUILayout.Width(EditorGUIUtility.labelWidth));
-            _sheetName = EditorGUILayout.TextField(_sheetName, UIUtils.TextInputLayout);
+            SheetSelectionSettings.SheetName = EditorGUILayout.TextField(SheetSelectionSettings.SheetName, UIUtils.TextInputLayout);
             EditorGUILayout.EndHorizontal();
             
             // Range
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("Range", GUILayout.Width(EditorGUIUtility.labelWidth));
-            _range = EditorGUILayout.TextField(_range, UIUtils.TextInputLayout);
+            SheetSelectionSettings.Range = EditorGUILayout.TextField(SheetSelectionSettings.Range, UIUtils.TextInputLayout);
             EditorGUILayout.EndHorizontal();
             
-            bool validData = !string.IsNullOrWhiteSpace(_spreadsheetUrl) && !string.IsNullOrWhiteSpace(_sheetName) && !string.IsNullOrWhiteSpace(_range);
+            bool validData = !string.IsNullOrWhiteSpace(SheetSelectionSettings.SpreadsheetUrl) && !string.IsNullOrWhiteSpace(SheetSelectionSettings.SheetName) && !string.IsNullOrWhiteSpace(SheetSelectionSettings.Range);
             
             // Process sheet data.
             EditorGUILayout.BeginHorizontal();
@@ -315,8 +311,8 @@ namespace ScriptableObjectsFromSheets.UI
         {
             SheetQuery query = new SheetQuery()
             {
-                SheetId = SheetQuery.ExtractSheetId(_spreadsheetUrl),
-                Range = $"{_sheetName}!{_range}"
+                SheetId = SheetQuery.ExtractSheetId(SheetSelectionSettings.SpreadsheetUrl),
+                Range = $"{SheetSelectionSettings.SheetName}!{SheetSelectionSettings.Range}"
             };
             
             _classFields = new List<ClassField>();
@@ -342,8 +338,8 @@ namespace ScriptableObjectsFromSheets.UI
 
         private bool SheetDataIsValid()
         {
-            return _spreadsheetUrl.Contains("https://docs.google.com/spreadsheets/d/") &&
-                   !string.IsNullOrWhiteSpace(_sheetName) && _range.Contains(":");
+            return SheetSelectionSettings.SpreadsheetUrl.Contains("https://docs.google.com/spreadsheets/d/") &&
+                   !string.IsNullOrWhiteSpace(SheetSelectionSettings.SheetName) && SheetSelectionSettings.Range.Contains(":");
         }
 
         private void UpdateWindow()

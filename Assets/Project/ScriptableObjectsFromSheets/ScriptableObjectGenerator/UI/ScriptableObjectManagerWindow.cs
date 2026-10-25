@@ -26,9 +26,6 @@ namespace ScriptableObjectsFromSheets.UI
         private HashSet<ScriptableObject> _dirtyScriptableObjects = new HashSet<ScriptableObject>(); // We need to use a hash because we don't want duplicated SOs
         
         // Google Sheets settings
-        private static string _spreadsheetUrl = "https://docs.google.com/spreadsheets/d/1NNL6lvA7hHKdwlYU7KT7_4kYi1ZzvXTrEs0onUa-mmw/edit?gid=0#gid=0";
-        private string _sheetName = "Sheet1";
-        private string _range = "A1:F4";
         private ProcessedSheetData _processedSheetData;
         private bool _sheetFoldout;
 
@@ -105,24 +102,24 @@ namespace ScriptableObjectsFromSheets.UI
                 // Spreadsheet URL
                 EditorGUILayout.BeginHorizontal();
                 EditorGUILayout.LabelField("Spreadsheet URL", GUILayout.Width(EditorGUIUtility.labelWidth));
-                _spreadsheetUrl = EditorGUILayout.TextField(_spreadsheetUrl, UIUtils.TextInputLayout);
+                SheetSelectionSettings.SpreadsheetUrl = EditorGUILayout.TextField(SheetSelectionSettings.SpreadsheetUrl, UIUtils.TextInputLayout);
                 EditorGUILayout.EndHorizontal();
             
                 // Sheet Name
                 EditorGUILayout.BeginHorizontal();
                 EditorGUILayout.LabelField("Sheet Name", GUILayout.Width(EditorGUIUtility.labelWidth));
-                _sheetName = EditorGUILayout.TextField(_sheetName, UIUtils.TextInputLayout);
+                SheetSelectionSettings.SheetName = EditorGUILayout.TextField(SheetSelectionSettings.SheetName, UIUtils.TextInputLayout);
                 EditorGUILayout.EndHorizontal();
             
                 // Range
                 EditorGUILayout.BeginHorizontal();
                 EditorGUILayout.LabelField("Range", GUILayout.Width(EditorGUIUtility.labelWidth));
-                _range = EditorGUILayout.TextField(_range, UIUtils.TextInputLayout);
+                SheetSelectionSettings.Range = EditorGUILayout.TextField(SheetSelectionSettings.Range, UIUtils.TextInputLayout);
                 EditorGUILayout.EndHorizontal();
             
                 // Process sheet data.
                 EditorGUILayout.BeginHorizontal();
-                bool validSheetData = UIUtils.SheetDataIsValid(_spreadsheetUrl, _sheetName, _range);
+                bool validSheetData = UIUtils.SheetDataIsValid(SheetSelectionSettings.SpreadsheetUrl, SheetSelectionSettings.SheetName, SheetSelectionSettings.Range);
                 
                 GUI.backgroundColor = !validSheetData ? Color.firebrick : Color.green;
             
@@ -179,8 +176,8 @@ namespace ScriptableObjectsFromSheets.UI
         {
             SheetQuery query = new SheetQuery()
             {
-                SheetId = SheetQuery.ExtractSheetId(_spreadsheetUrl),
-                Range = $"{_sheetName}!{_range}"
+                SheetId = SheetQuery.ExtractSheetId(SheetSelectionSettings.SpreadsheetUrl),
+                Range = $"{SheetSelectionSettings.SheetName}!{SheetSelectionSettings.Range}"
             };
             
             try
