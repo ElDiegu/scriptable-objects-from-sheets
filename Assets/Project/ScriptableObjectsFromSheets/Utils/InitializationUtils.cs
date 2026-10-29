@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using ScriptableObjectsFromSheets.Core;
 using UnityEngine;
 
 namespace ScriptableObjectsFromSheets.Utils
@@ -17,6 +18,8 @@ namespace ScriptableObjectsFromSheets.Utils
                 if (int.TryParse(value, out int intValue)) return Convert.ChangeType(intValue, conversionType);
             }
             
+            if (SupportedTypesConfiguration.TryCustomParse(value, conversionType, out object customValue)) return customValue;
+
             if (conversionType != typeof(string) && conversionType.GetInterface("IEnumerable`1") != null) 
             {
                 Type enumerableType = conversionType.GetInterface("IEnumerable`1").GetGenericArguments()[0];

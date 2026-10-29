@@ -39,7 +39,7 @@ namespace ScriptableObjectsFromSheets.Core
 
             for (int i = 0; i < rawSheetData.Headers.Count; i++)
             {
-                Fields.Add(rawSheetData.Headers[i], TypeInference.InferTypeAsStringFromValues(rawSheetData.Columns[i]));
+                Fields.Add(rawSheetData.Headers[i], SupportedTypesConfiguration.InferTypeAsStringFromValues(rawSheetData.Columns[i]));
             }
         }
     }

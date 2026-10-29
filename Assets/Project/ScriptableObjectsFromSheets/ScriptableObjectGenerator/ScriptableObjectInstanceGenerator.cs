@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Reflection;
 using ScriptableObjectsFromSheets.APIIntegration;
 using ScriptableObjectsFromSheets.Core;
 using UnityEditor;
@@ -8,7 +10,7 @@ namespace ScriptableObjectsFromSheets.ScriptableObjectGenerator
 {
     public static class ScriptableObjectInstanceGenerator
     {
-        public static void GenerateScriptableObjects<T>(List<List<string>> data, string path) where T : ImportableSO<T>
+        private static void GenerateScriptableObjects<T>(List<List<string>> data, string path) where T : ImportableSO<T>
         {
             for (int i = 1; i < data.Count; i ++) 
             {
@@ -26,6 +28,16 @@ namespace ScriptableObjectsFromSheets.ScriptableObjectGenerator
             if (data == null) return;
 
             GenerateScriptableObjects<T>(data, outputPath);
+        }
+
+        public static void GenerateScriptableObjectsFromQuery(SheetQuery query, string outputPath, Type type)
+        {
+            
+            MethodInfo method = typeof(ScriptableObjectInstanceGenerator)
+                .GetMethod(nameof(ScriptableObjectInstanceGenerator.GenerateScriptableObjectsFromRange))
+                ?.MakeGenericMethod(type);
+                    
+            method.Invoke(null, new object[] {query, outputPath});
         }
     }
 }
