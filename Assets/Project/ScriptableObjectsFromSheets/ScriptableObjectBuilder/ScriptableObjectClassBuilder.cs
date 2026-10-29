@@ -95,7 +95,7 @@ namespace ScriptableObjectsFromSheets.ScriptableObjectBuilder
         }
         
         public string FieldDeclaration => $"public {(IsList ? $"List<{Type}>" : Type)} {Name};";
-        public string AttributeDeclaration => $"[SheetImported(\"{EscapeForStringLiteral(_headerName ?? Name)}\"{(IsList ? $", \"{ListSeparator}\"" : "")})]";
+        public string AttributeDeclaration => $"[SheetImported(\"{EscapeForStringLiteral(_headerName ?? Name)}\"{(IsList ? $", \'{ListSeparator}\'" : "")})]";
 
         /// <summary>
         /// Clears header names from spaces and special characters to obtain a valid field name
