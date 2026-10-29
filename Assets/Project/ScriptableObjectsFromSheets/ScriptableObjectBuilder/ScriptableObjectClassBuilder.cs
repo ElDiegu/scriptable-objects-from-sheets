@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using ScriptableObjectsFromSheets.Extensions;
 using UnityEditor;
@@ -19,7 +20,7 @@ namespace ScriptableObjectsFromSheets.ScriptableObjectBuilder
             sb.AppendLineWithIndent("using System.Collections;", indentLevel);
             sb.AppendLineWithIndent("using System.Collections.Generic;", indentLevel);
             sb.AppendLineWithIndent("using System.Linq;", indentLevel);
-            sb.AppendLineWithIndent("using SOFromSheets.SOBuilder;", indentLevel);
+            sb.AppendLineWithIndent("using ScriptableObjectsFromSheets.Core;", indentLevel);
             sb.AppendLine();
             
             // Namespace
@@ -29,7 +30,7 @@ namespace ScriptableObjectsFromSheets.ScriptableObjectBuilder
             
             sb.AppendLineWithIndent(
                 $"[CreateAssetMenuAttribute(menuName = \"{assetMenuPath}\", fileName = \"{fileName}\")]", indentLevel);
-            sb.AppendLineWithIndent($"public class {className} : ScriptableObject", indentLevel);
+            sb.AppendLineWithIndent($"public class {className} : ImportableSO<{className}>", indentLevel);
             sb.AppendLineWithIndent("{", indentLevel);
             indentLevel++;
 
@@ -63,7 +64,7 @@ namespace ScriptableObjectsFromSheets.ScriptableObjectBuilder
     }
 
     /// <summary>
-    /// This class is used to store basic information of a basic class field, allowing for an easy modification and management.
+    /// This class is used to store basic information of a basic class field, allowing for an easy modification and management
     /// </summary>
     public class ClassField
     {
@@ -72,10 +73,12 @@ namespace ScriptableObjectsFromSheets.ScriptableObjectBuilder
         public bool IsList;
         public char ListSeparator;
         public bool IsSheetImported;
+        private readonly string _headerName;
 
-        public ClassField(string name, string type)
+        public ClassField(string headerName, string type)
         {
-            Name = name;
+            Name = SanitizeName(headerName);
+            _headerName = headerName;
             Type = type;
             IsList = false;
             ListSeparator = ',';
@@ -92,6 +95,21 @@ namespace ScriptableObjectsFromSheets.ScriptableObjectBuilder
         }
         
         public string FieldDeclaration => $"public {(IsList ? $"List<{Type}>" : Type)} {Name};";
-        public string AttributeDeclaration => $"[SheetImported(\"{Name}\"{(IsList ? $", \"{ListSeparator}\"" : "")}]";
+        public string AttributeDeclaration => $"[SheetImported(\"{EscapeForStringLiteral(_headerName ?? Name)}\"{(IsList ? $", \"{ListSeparator}\"" : "")})]";
+
+        /// <summary>
+        /// Clears header names from spaces and special characters to obtain a valid field name
+        /// </summary>
+        /// <param name="header">Header cell of the sheet range</param>
+        /// <returns>A sanitized string valid for field declaration</returns>
+        public static string SanitizeName(string header)
+        {
+            string name = new string((header ?? "").Where(c => char.IsLetterOrDigit(c) || c == '_').ToArray());
+
+            if (name.Length == 0) return "Field";
+            return char.IsDigit(name[0]) ? $"_{name}" : name;
+        }
+
+        private static string EscapeForStringLiteral(string value) => value.Replace("\\", "\\\\").Replace("\"", "\\\"");
     }
 }
