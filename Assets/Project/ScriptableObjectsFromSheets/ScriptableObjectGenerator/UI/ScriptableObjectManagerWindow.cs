@@ -43,6 +43,7 @@ namespace ScriptableObjectsFromSheets.UI
         public void OnEnable()
         {
             _defaultGUIColor = GUI.backgroundColor;
+            _targetClass = SheetSelectionSettings.TargetScript;
         }
 
         public void OnDisable()
@@ -78,6 +79,7 @@ namespace ScriptableObjectsFromSheets.UI
             
             EditorGUILayout.LabelField("Type", GUILayout.Width(40));
             _targetClass = (MonoScript) EditorGUILayout.ObjectField(_targetClass, typeof(MonoScript), true, GUILayout.Width(200));
+            SheetSelectionSettings.TargetScript = _targetClass;
             if (_targetClass != null) _targetType = _targetClass.GetClass();
 
             if (GUILayout.Button("Load", EditorStyles.toolbarButton, GUILayout.Width(50)))

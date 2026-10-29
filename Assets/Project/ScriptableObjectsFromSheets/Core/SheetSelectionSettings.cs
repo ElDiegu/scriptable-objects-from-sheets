@@ -13,6 +13,7 @@ namespace ScriptableObjectsFromSheets.Core
         [SerializeField] private string spreadsheetUrl = "";
         [SerializeField] private string sheetName = "";
         [SerializeField] private string range = "";
+        [SerializeField] private string targetScriptGuid = "";
 
         public static string SpreadsheetUrl
         {
@@ -30,6 +31,20 @@ namespace ScriptableObjectsFromSheets.Core
         {
             get => instance.range;
             set => Set(ref instance.range, value);
+        }
+        
+        public static MonoScript TargetScript
+        {
+            get
+            {
+                string path = AssetDatabase.GUIDToAssetPath(instance.targetScriptGuid);
+                return string.IsNullOrEmpty(path) ? null : AssetDatabase.LoadAssetAtPath<MonoScript>(path);
+            }
+            set
+            {
+                string path = value != null ? AssetDatabase.GetAssetPath(value) : "";
+                Set(ref instance.targetScriptGuid, string.IsNullOrEmpty(path) ? "" : AssetDatabase.AssetPathToGUID(path));
+            }
         }
 
         private static void Set(ref string field, string value)
