@@ -121,7 +121,7 @@ namespace ScriptableObjectsFromSheets.UI
             Type type = member is FieldInfo ? ((FieldInfo)member).FieldType : ((PropertyInfo)member).PropertyType; 
             object value = member is FieldInfo ? ((FieldInfo)member).GetValue(so) : ((PropertyInfo)member).GetValue(so);
             
-            object newValue = SupportedTypesConfiguration.TypeController(cellRect, type, value);
+            object newValue = SupportedTypesControllers.TypeController(cellRect, type, value);
 
             if (!Equals(value, newValue))
             {

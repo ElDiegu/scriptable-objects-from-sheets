@@ -1,9 +1,7 @@
 {
-    "name": "ScriptableObjectsFronSheets",
-    "rootNamespace": "",
-    "references": [
-        "GUID:21b0c8d1703a94250bfac916590cea4f"
-    ],
+    "name": "ScriptableObjectsFromSheets",
+    "rootNamespace": "ScriptableObjectsFromSheets",
+    "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

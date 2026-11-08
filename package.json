@@ -4,7 +4,15 @@
   "version": "0.1.0",
   "unity": "6000.3",
   "unityRelease": "10f1",
-  "description": "Replace this with your own description of the package. \n\nFor best results, use this text to summarize: \n\u25aa What the package does \n\u25aa How it can benefit the user \n\nNote: Special formatting characters are supported, including line breaks ('\\n') and bullets ('\\u25AA').",
+  "description": "Generate ScriptableObject classes and assets directly from a Google Sheet inside the Unity Editor. \n\n\u25aa Builds a ScriptableObject class from a sheet, inferring a type for each column \n\u25aa Creates and updates assets from the sheet rows \n\u25aa Supports numbers, bool, string, Vector2, Vector3, Color and lists \n\u25aa Uses a Google service account, Editor only",
+  "keywords": [
+    "scriptableobject",
+    "google sheets",
+    "spreadsheet",
+    "data",
+    "import",
+    "editor"
+  ],
   "dependencies": {
     "com.unity.nuget.newtonsoft-json": "3.2.1",
     "com.unity.visualscripting": "1.9.9"
@@ -12,7 +20,7 @@
   "author": {
     "name": "El Diegu"
   },
-  "changelogUrl": "https://example.com/changelog.html",
-  "documentationUrl": "https://example.com/",
-  "licensesUrl": "https://example.com/licensing.html"
+  "changelogUrl": "https://github.com/ElDiegu/scriptable-objects-from-sheets/blob/main/Packages/com.eldieguuu.scriptableobjectsfromsheets/CHANGELOG.md",
+  "documentationUrl": "https://github.com/ElDiegu/scriptable-objects-from-sheets/blob/main/Packages/com.eldieguuu.scriptableobjectsfromsheets/README.md",
+  "licensesUrl": "https://github.com/ElDiegu/scriptable-objects-from-sheets/blob/main/Packages/com.eldieguuu.scriptableobjectsfromsheets/Third%20Party%20Notices.md"
 }
