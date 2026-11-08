@@ -1,0 +1,26 @@
+{
+    "name": "ScriptableObjectsFromSheets.Editor",
+    "rootNamespace": "ScriptableObjectsFromSheets",
+    "references": [
+        "ScriptableObjectsFromSheets",
+        "Unity.Nuget.Newtonsoft-Json",
+        "Unity.VisualScripting.Core"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "Google.Apis.dll",
+        "Google.Apis.Core.dll",
+        "Google.Apis.Auth.dll",
+        "Google.Apis.Sheets.v4.dll",
+        "System.Management.dll"
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
