@@ -26,7 +26,7 @@ The Google API client libraries are bundled with the package. See [Third Party N
 Open **Window > Package Manager**, click **+ > Add package from git URL...** and enter:
 
 ```
-https://github.com/ElDiegu/scriptable-objects-from-sheets.git?path=/Packages/com.eldieguuu.scriptableobjectsfromsheets
+https://github.com/ElDiegu/scriptable-objects-from-sheets.git
 ```
 
 Alternatively, clone the repository and use **Add package from disk...** on the package's `package.json`.
