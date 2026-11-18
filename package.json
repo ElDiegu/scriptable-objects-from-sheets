@@ -20,7 +20,7 @@
   "author": {
     "name": "El Diegu"
   },
-  "changelogUrl": "https://github.com/ElDiegu/scriptable-objects-from-sheets/blob/main/Packages/com.eldieguuu.scriptableobjectsfromsheets/CHANGELOG.md",
-  "documentationUrl": "https://github.com/ElDiegu/scriptable-objects-from-sheets/blob/main/Packages/com.eldieguuu.scriptableobjectsfromsheets/README.md",
-  "licensesUrl": "https://github.com/ElDiegu/scriptable-objects-from-sheets/blob/main/Packages/com.eldieguuu.scriptableobjectsfromsheets/Third%20Party%20Notices.md"
+  "changelogUrl": "https://github.com/ElDiegu/scriptable-objects-from-sheets/blob/main/CHANGELOG.md",
+  "documentationUrl": "https://github.com/ElDiegu/scriptable-objects-from-sheets/blob/main/README.md",
+  "licensesUrl": "https://github.com/ElDiegu/scriptable-objects-from-sheets/blob/main/Third%20Party%20Notices.md"
 }
