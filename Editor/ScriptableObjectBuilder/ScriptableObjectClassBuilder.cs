@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using ScriptableObjectsFromSheets.Extensions;
+using ScriptableObjectsFromSheets.Utils;
 using UnityEditor;
 
 namespace ScriptableObjectsFromSheets.ScriptableObjectBuilder
@@ -94,7 +95,26 @@ namespace ScriptableObjectsFromSheets.ScriptableObjectBuilder
             IsSheetImported = true;     
         }
         
-        public string FieldDeclaration => $"public {(IsList ? $"List<{Type}>" : Type)} {Name};";
+        public const string EnumTypeName = "Enum";
+        
+        public MonoScript EnumScript;
+
+        public bool IsEnum => Type == EnumTypeName;
+
+        /// <summary>
+        /// Resolves the name of the Enum provided 
+        /// </summary>
+        public string ResolvedType
+        {
+            get
+            {
+                if (!IsEnum) return Type;
+                System.Type enumType = EnumUtils.ResolveEnumType(EnumScript);
+                return enumType != null ? enumType.FullName.Replace('+', '.') : "int";
+            }
+        }
+
+        public string FieldDeclaration => $"public {(IsList ? $"List<{ResolvedType}>" : ResolvedType)} {Name};";
         public string AttributeDeclaration => $"[SheetImported(\"{EscapeForStringLiteral(_headerName ?? Name)}\"{(IsList ? $", \'{ListSeparator}\'" : "")})]";
 
         /// <summary>

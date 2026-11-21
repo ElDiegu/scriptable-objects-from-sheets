@@ -27,6 +27,7 @@ namespace ScriptableObjectsFromSheets.Core
             if (type == typeof(Vector2)) return EditorGUI.Vector2Field(rect, GUIContent.none, (Vector2)value);
             if (type == typeof(Vector3)) return EditorGUI.Vector3Field(rect, GUIContent.none, (Vector3)value);
             if (type == typeof(Color)) return EditorGUI.ColorField(rect, (Color)value);
+            if (type.IsEnum) return EditorGUI.EnumPopup(rect, (Enum)value);
 
             return null;
         }

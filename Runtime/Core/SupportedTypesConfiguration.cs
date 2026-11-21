@@ -24,7 +24,8 @@ namespace ScriptableObjectsFromSheets.Core
             ("Vector2", data => TryParseVector(data, 2, out _)),
             ("Vector3", data => TryParseVector(data, 3, out _)),
             ("Color", data => ColorUtility.TryParseHtmlString(data.Trim(), out _)),
-            ("string", data => true)
+            ("string", data => true),
+            ("Enum", data => false)
         };
 
         /// <summary>

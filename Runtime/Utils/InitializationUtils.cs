@@ -20,7 +20,9 @@ namespace ScriptableObjectsFromSheets.Utils
             
             if (SupportedTypesConfiguration.TryCustomParse(value, conversionType, out object customValue)) return customValue;
 
-            if (conversionType != typeof(string) && conversionType.GetInterface("IEnumerable`1") != null) 
+            if (conversionType.IsEnum) return Enum.Parse(conversionType, value.Trim(), false);
+
+            if (conversionType != typeof(string) && conversionType.GetInterface("IEnumerable`1") != null)
             {
                 Type enumerableType = conversionType.GetInterface("IEnumerable`1").GetGenericArguments()[0];
                 

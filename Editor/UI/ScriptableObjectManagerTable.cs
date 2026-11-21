@@ -209,6 +209,7 @@ namespace ScriptableObjectsFromSheets.UI
             if (type == typeof(float)) return 50f;
             if (type == typeof(double)) return 50f;
             if (type == typeof(string)) return 150f;
+            if (type.IsEnum) return 120f;
 
             return 50f;
         }
