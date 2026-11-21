@@ -14,6 +14,7 @@ namespace ScriptableObjectsFromSheets.Core
         [SerializeField] private string sheetName = "";
         [SerializeField] private string range = "";
         [SerializeField] private string targetScriptGuid = "";
+        [SerializeField] private string folderPath = "Assets";
 
         public static string SpreadsheetUrl
         {
@@ -45,6 +46,15 @@ namespace ScriptableObjectsFromSheets.Core
                 string path = value != null ? AssetDatabase.GetAssetPath(value) : "";
                 Set(ref instance.targetScriptGuid, string.IsNullOrEmpty(path) ? "" : AssetDatabase.AssetPathToGUID(path));
             }
+        }
+
+        /// <summary>
+        /// Project folder the Manager reads Scriptable Object instances from and generates them into.
+        /// </summary>
+        public static string FolderPath
+        {
+            get => instance.folderPath;
+            set => Set(ref instance.folderPath, value);
         }
 
         private static void Set(ref string field, string value)
