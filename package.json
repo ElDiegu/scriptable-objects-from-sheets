@@ -1,7 +1,7 @@
 {
   "name": "com.eldieguuu.scriptableobjectsfromsheets",
   "displayName": "Scriptable Objects From Sheets",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "unity": "6000.3",
   "unityRelease": "10f1",
   "description": "Generate ScriptableObject classes and assets directly from a Google Sheet inside the Unity Editor. \n\n\u25aa Builds a ScriptableObject class from a sheet, inferring a type for each column \n\u25aa Creates and updates assets from the sheet rows \n\u25aa Supports numbers, bool, string, Vector2, Vector3, Color and lists \n\u25aa Uses a Google service account, Editor only",

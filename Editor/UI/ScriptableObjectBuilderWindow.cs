@@ -198,6 +198,8 @@ namespace ScriptableObjectsFromSheets.UI
                 UIUtils.TableHeaderLabel);
             GUI.Label(UIUtils.TableCellRect(ref tableCursor, UIUtils.TypeColumnWidth, rowRect), "Type",
                 UIUtils.TableHeaderLabel);
+            GUI.Label(UIUtils.TableCellRect(ref tableCursor, UIUtils.ExtraTypeInfoColumnWidth, rowRect), "Extra Type Info",
+                UIUtils.TableHeaderLabel);
             GUI.Label(UIUtils.TableCellRect(ref tableCursor, UIUtils.IsListColumnWidth, rowRect), "Is List",
                 UIUtils.TableHeaderLabel);
             GUI.Label(UIUtils.TableCellRect(ref tableCursor, UIUtils.SeparatorCharColumnWidth, rowRect),
@@ -240,7 +242,16 @@ namespace ScriptableObjectsFromSheets.UI
                     _availableTypes.ToArray())
             ];
             
-            field.IsList = EditorGUI.Toggle(UIUtils.TableCellRect(ref tableCursor, UIUtils.IsListColumnWidth, rowRect), field.IsList);
+            Rect extraInfoRect = UIUtils.TableCellRect(ref tableCursor, UIUtils.ExtraTypeInfoColumnWidth, rowRect);
+            if (field.IsEnum)
+            {
+                field.EnumScript = (MonoScript)EditorGUI.ObjectField(extraInfoRect, field.EnumScript, typeof(MonoScript), false);
+
+                // Checks if the provided script is really an Enum
+                if (field.EnumScript != null && EnumUtils.ResolveEnumType(field.EnumScript) == null) field.EnumScript = null;
+            }
+
+            field.IsList =EditorGUI.Toggle(UIUtils.TableCellRect(ref tableCursor, UIUtils.IsListColumnWidth, rowRect), field.IsList);
 
             if (field.IsList)
             {

@@ -59,6 +59,15 @@ The first row of the selected range holds the headers. Each following row become
 3. Review the inferred fields (use **Suggest** to re-run inference, **Add Field** to add one manually).
 4. Generate the class. The result inherits from `ImportableSO<T>` and tags each field with `[SheetImported("Header")]`.
 
+#### Enum fields
+
+Enums are never inferred from the sheet, so select them manually:
+
+1. Set the field's **Type** to `Enum`.
+2. In the **Extra Type Info** column (empty for every other type), assign the script that defines the enum.
+
+The script's file name must match the enum's name (for example `UnitTypeEnum.cs` for `enum UnitTypeEnum`), and it must already be compiled. Scripts that don't define an enum are rejected. Until an enum is selected, the field is generated as `int`.
+
 You can also write the class yourself:
 
 ```csharp
@@ -83,6 +92,8 @@ public class Enemy : ImportableSO<Enemy>
 1. Choose the output folder and the target class, then click **Load**.
 2. Enter the sheet details and click **Generate Scriptable Objects**.
 
+Loaded assets are shown in an editable table. Enum fields appear as a dropdown listing every value of the enum.
+
 ## Supported types
 
 | Type                                   | Sheet format                                   |
@@ -92,12 +103,15 @@ public class Enemy : ImportableSO<Enemy>
 | `string`                               | Any text                                       |
 | `Vector2`, `Vector3`                   | `(x;y)` or `(x;y;z)`, components split by `;`  |
 | `Color`                                | HTML color, such as `#RRGGBB` or `red`         |
+| Any `enum`                             | Exact (case-sensitive) member name, such as `HeavyInfantry` |
 | `List<T>` of the types above           | Values split by the attribute's separator      |
 
 ## Troubleshooting
 
 - **"Failed to validate credentials":** check that the JSON file is a service account key and that the Sheets API is enabled for its project.
 - **Permission or 404 errors when processing a sheet:** share the spreadsheet with the service account's e-mail address.
+- **The enum script is rejected in the Builder:** the file name must match the enum's name and the project must have finished compiling. Reassign the script after compilation.
+- **Import fails on an enum column:** the cell must match a member name exactly, including case.
 - **A column is ignored:** the `[SheetImported]` header name must match the sheet header exactly.
 
 ## Support

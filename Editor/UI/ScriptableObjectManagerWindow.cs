@@ -19,7 +19,6 @@ namespace ScriptableObjectsFromSheets.UI
         private ScriptableObjectManagerTable _dataTable;
         
         // Scriptable Object settings variables
-        private string _folderPath = "Assets/Project/Resources/Scriptable Objects";
         private MonoScript _targetClass;
         private Type _targetType;
         private List<ScriptableObject> _scriptableObjectInstances = new List<ScriptableObject>();
@@ -71,10 +70,10 @@ namespace ScriptableObjectsFromSheets.UI
             EditorGUILayout.BeginHorizontal(EditorStyles.toolbar);
             
             EditorGUILayout.LabelField("Path", GUILayout.Width(40));
-            _folderPath = EditorGUILayout.TextField(_folderPath, EditorStyles.toolbarTextField, GUILayout.Width(200));
+            SheetSelectionSettings.FolderPath = EditorGUILayout.TextField(SheetSelectionSettings.FolderPath, EditorStyles.toolbarTextField, GUILayout.Width(200));
             if (GUILayout.Button("Browse", EditorStyles.toolbarButton, GUILayout.Width(50)))
             {
-                _folderPath = PathUtils.ChoosePath(_folderPath);
+                SheetSelectionSettings.FolderPath = PathUtils.ChoosePath(SheetSelectionSettings.FolderPath);
             }
             
             EditorGUILayout.LabelField("Type", GUILayout.Width(40));
@@ -186,7 +185,7 @@ namespace ScriptableObjectsFromSheets.UI
             {
                 // Since type arguments must be compile-tyme constant for the code to compile properly, we have to use
                 // reflection when calling our ScriptableObject generator.
-                ScriptableObjectInstanceGenerator.GenerateScriptableObjectsFromQuery(query, _folderPath, _targetType);
+                ScriptableObjectInstanceGenerator.GenerateScriptableObjectsFromQuery(query, SheetSelectionSettings.FolderPath, _targetType);
                 
                 _owner.Repaint();
             }
@@ -202,7 +201,7 @@ namespace ScriptableObjectsFromSheets.UI
             _classMembers = new List<MemberInfo>();
             
             // We use the AssetDatabase to find all GUIDs of the desired ScriptableObjects
-            var assetGuids = AssetDatabase.FindAssets($"t:{_targetType}", new string[] {_folderPath});
+            var assetGuids = AssetDatabase.FindAssets($"t:{_targetType}", new string[] {SheetSelectionSettings.FolderPath});
 
             // Then we use the obtained GUIDs to load the ScriptableObjects
             foreach (var guid in assetGuids)

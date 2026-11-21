@@ -7,7 +7,8 @@ namespace ScriptableObjectsFromSheets.Utils
     public static class UIUtils
     {
         public const float NameColumnWidth = 160f;
-        public const float TypeColumnWidth = 130f;
+        public const float TypeColumnWidth = 65f;
+        public const float ExtraTypeInfoColumnWidth = 150f;
         public const float IsListColumnWidth = 50f;
         public const float SeparatorCharColumnWidth = 50f;
         public const float DeleteButtonColumnWidth = 20f;
